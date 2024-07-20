@@ -26,9 +26,9 @@ const AdminLogin = () => {
           <div className="p-8 rounded-2xl bg-white shadow">
             <div>
               <img
-                src="/HMM.png"
+                src="/images/fullLogo.png"
                 alt="Logo"
-                className="w-32 mb-0 mx-auto block"
+                className="w-41 mb-0 mx-auto block"
               />
             </div>
             <form className="mt-0 space-y-4" onSubmit={submit}>

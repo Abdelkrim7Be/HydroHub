@@ -1,4 +1,5 @@
 import { lazy } from "react"; //lazy loading
+import AdminLogin from "./../../views/auth/AdminLogin";
 
 // Lazy Loading
 const Login = lazy(() => import("../../views/auth/Login"));
@@ -12,6 +13,10 @@ const publicRoutes = [
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/admin/login",
+    element: <AdminLogin />,
   },
 ];
 
