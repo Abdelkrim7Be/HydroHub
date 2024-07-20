@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+
+  const inputHandler = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: [e.target.value],
+    });
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    console.log(state);
+  };
   return (
     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4 flex-col">
       <div>
@@ -79,7 +95,7 @@ const Login = () => {
             </div>
           </div>
 
-          <form className="w-full">
+          <form className="w-full" onSubmit={submit}>
             <div className="mb-8">
               <h3 className="text-gray-800 text-2xl font-bold">Login</h3>
             </div>
@@ -90,6 +106,8 @@ const Login = () => {
                 </label>
                 <div className="relative flex items-center">
                   <input
+                    onChange={inputHandler}
+                    value={state.email}
                     name="email"
                     type="email"
                     required
@@ -119,6 +137,8 @@ const Login = () => {
                 </label>
                 <div className="relative flex items-center">
                   <input
+                    onChange={inputHandler}
+                    value={state.password}
                     name="password"
                     type="password"
                     required
