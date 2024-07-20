@@ -99,10 +99,7 @@ const AdminLogin = () => {
                   </label>
                 </div>
                 <div className="text-sm">
-                  <a
-                    href="javascript:void(0);"
-                    className="text-blue-600 hover:underline font-semibold"
-                  >
+                  <a href="#" className="text-blue-600 hover:underline">
                     Forgot your password?
                   </a>
                 </div>
@@ -120,7 +117,7 @@ const AdminLogin = () => {
                 Don't have an account?{" "}
                 <Link
                   to="/register"
-                  className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold"
+                  className="text-blue-600 hover:underline ml-1 whitespace-nowrap"
                 >
                   Register here
                 </Link>
