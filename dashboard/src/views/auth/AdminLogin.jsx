@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { adminLogin } from "../../store/Reducers/authReducer";
 
 const AdminLogin = () => {
+  const dispatch = useDispatch();
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -16,7 +20,8 @@ const AdminLogin = () => {
 
   const submit = (e) => {
     e.preventDefault();
-    console.log(state);
+    dispatch(adminLogin(state));
+    // console.log(state);
   };
 
   return (
