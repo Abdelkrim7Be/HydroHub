@@ -3,6 +3,8 @@ const app = express();
 require("dotenv").config();
 const port = process.env.PORT;
 
+app.use("/api", require("./routes/authRoutes"));
+
 app.get("/", (req, res) => {
   res.send("My backend is fine");
 });
