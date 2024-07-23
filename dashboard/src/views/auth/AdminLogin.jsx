@@ -1,10 +1,16 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { adminLogin } from "../../store/Reducers/authReducer";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { adminLogin, messageClear } from "../../store/Reducers/authReducer";
+import LoadingSpinner from "./../../layout/loadingSpinner";
+import { toast } from "react-hot-toast";
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { loader, errorMessage, successMessage } = useSelector(
+    (state) => state.auth
+  );
 
   const [state, setState] = useState({
     email: "",
@@ -23,6 +29,18 @@ const AdminLogin = () => {
     dispatch(adminLogin(state));
     // console.log(state);
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+      navigate("/");
+    }
+  }, [errorMessage, successMessage]);
 
   return (
     <div className="bg-gray-50 font-[sans-serif]">
@@ -112,10 +130,11 @@ const AdminLogin = () => {
 
               <div className="!mt-8">
                 <button
+                  disabled={loader ? true : false}
                   type="submit"
-                  className="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                  className="w-full py-3 px-3 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
                 >
-                  Sign in
+                  {loader ? <LoadingSpinner /> : "Sign in"}
                 </button>
               </div>
               <p className="text-gray-800 text-sm !mt-8 text-center">
