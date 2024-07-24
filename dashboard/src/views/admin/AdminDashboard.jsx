@@ -2,8 +2,72 @@ import React from "react";
 import { FaUsers } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
+import Chart from "react-apexcharts";
 
 const AdminDashboard = () => {
+  const state = {
+    series: [
+      {
+        name: "Orders",
+        data: [23, 34, 75, 85, 92, 49, 83, 69, 72, 30, 62, 89],
+      },
+      {
+        name: "Revenue",
+        data: [41, 85, 73, 69, 12, 58, 76, 89, 45, 23, 99, 78],
+      },
+      {
+        name: "Sellers",
+        data: [10, 12, 15, 14, 13, 9, 16, 19, 23, 25, 24, 21],
+      },
+    ],
+    options: {
+      colors: ["#E0B50F", "#1e1e2c", "#34b1aa"],
+      chart: {
+        type: "bar",
+        background: "transparent",
+        foreColor: "#1e1e2c",
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: false,
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        curve: "smooth",
+        colors: "#1e1e2c",
+        width: 2.5,
+        dashArray: 0,
+      },
+      xaxis: {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+      },
+      legend: {
+        position: "top",
+      },
+      grid: {
+        borderColor: "#c2c2c2",
+        strokeDashArray: 0,
+      },
+    },
+  };
   return (
     <div>
       <div className="px-2 md:px-7 py-5">
@@ -43,6 +107,18 @@ const AdminDashboard = () => {
             <div className="w-[40px] h-[40px] rounded-full bg-[#f29f6782] flex justify-center items-center text-xl">
               <FaCartShopping className="shadow-lg" />
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="px-2 md:px-7 py-5 w-full flex flex-wrap mt-7">
+        <div className="w-full lg:w-7/12 lg:pr-3">
+          <div className="w-full bg-[#e2e2e2] p-4 rounded-md">
+            <Chart
+              options={state.options}
+              series={state.series}
+              type="bar"
+              height={350}
+            />
           </div>
         </div>
       </div>
