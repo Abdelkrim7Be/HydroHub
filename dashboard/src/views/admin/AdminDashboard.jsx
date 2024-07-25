@@ -3,6 +3,7 @@ import { FaUsers } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
 import Chart from "react-apexcharts";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   const state = {
@@ -150,6 +151,159 @@ const AdminDashboard = () => {
               type="bar"
               height={350}
             />
+          </div>
+        </div>
+        <div className="w-full lg:w-5/12 lg:pl-4 mt-6 lg:mt-0">
+          <div className="w-full bg-[#e2e2e2] p-4 rounded-md text-[#1e1e2c]">
+            <div className="flex justify-between items-center">
+              <h2 className="font-semibold text-lg text-[#1e1e2c] pb-3">
+                Recent Seller Message
+              </h2>
+              <Link className="font-semibold text-sm text-[#393939]">
+                View all
+              </Link>
+            </div>
+            <div className="flex flex-col gap-2 pt-6 text-[#1e1e2c]">
+              <ol className="relative border-l border-[#1e1e2c] ml-4">
+                <li className="mb-3 ml-6">
+                  <div className="w-10 h-10 flex absolute -left-5 shadow-lg justify-center items-center p-[6px] bg-[#f29f6782] rounded-full z-10">
+                    <img
+                      className="w-full rounded-full h-full shadow-lg"
+                      src="http://localhost:3000/images/admin.jpg"
+                      alt="admin"
+                    />
+                  </div>
+                  <div className="p-3 bg-[#bbbbbb] rounded-lg shadow-sm">
+                    <div className="flex justify-between items-center mb-2">
+                      <a href="#" className="text-md font-normal">
+                        Admin
+                      </a>
+                      <time className="mb-1 text-sm font-normal sm:order-last sm:md-0">
+                        2 days ago
+                      </time>
+                    </div>
+                    <div className="p-2 text-xs font-normal bg-[#f4b48a61] rounded-lg border border-[#1e1e2c]">
+                      How are you?
+                    </div>
+                  </div>
+                </li>
+                <li className="mb-3 ml-6">
+                  <div className="w-10 h-10 flex absolute -left-5 shadow-lg justify-center items-center p-[6px] bg-[#f29f6782] rounded-full z-10">
+                    <img
+                      className="w-full rounded-full h-full shadow-lg"
+                      src="http://localhost:3000/images/admin.jpg"
+                      alt="admin"
+                    />
+                  </div>
+                  <div className="p-3 bg-[#bbbbbb] rounded-lg shadow-sm">
+                    <div className="flex justify-between items-center mb-2">
+                      <a href="#" className="text-md font-normal">
+                        Admin
+                      </a>
+                      <time className="mb-1 text-sm font-normal sm:order-last sm:md-0">
+                        2 days ago
+                      </time>
+                    </div>
+                    <div className="p-2 text-xs font-normal bg-[#f4b48a61] rounded-lg border border-[#1e1e2c]">
+                      How are you?
+                    </div>
+                  </div>
+                </li>
+                <li className="mb-3 ml-6">
+                  <div className="w-10 h-10 flex absolute -left-5 shadow-lg justify-center items-center p-[6px] bg-[#f29f6782] rounded-full z-10">
+                    <img
+                      className="w-full rounded-full h-full shadow-lg"
+                      src="http://localhost:3000/images/admin.jpg"
+                      alt="admin"
+                    />
+                  </div>
+                  <div className="p-3 bg-[#bbbbbb] rounded-lg shadow-sm">
+                    <div className="flex justify-between items-center mb-2">
+                      <a href="#" className="text-md font-normal">
+                        Admin
+                      </a>
+                      <time className="mb-1 text-sm font-normal sm:order-last sm:md-0">
+                        2 days ago
+                      </time>
+                    </div>
+                    <div className="p-2 text-xs font-normal bg-[#f4b48a61] rounded-lg border border-[#1e1e2c]">
+                      How are you?
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="px-2 md:px-7 py-5 w-full flex flex-wrap mt-7">
+        <div className="w-full bg-[#e2e2e2] p-4 rounded-md">
+          <div className="flex justify-between items-center">
+            <h2 className="font-semibold text-lg text-[#1e1e2c] pb-3">
+              Recent Orders
+            </h2>
+            <Link className="font-semibold text-sm text-[#1e1e2c]">
+              View All
+            </Link>
+          </div>
+          <div className="relative overflow-x-auto">
+            <table className="w-full text-sm text-left text-[#1e1e2c] bg-[#f4b48a61] rounded-lg">
+              <thead className="text-sm uppercase border-b border-[#1e1e2c] ">
+                <tr>
+                  <th scope="col" className="py-3 px-4">
+                    Order Id
+                  </th>
+                  <th scope="col" className="py-3 px-4">
+                    Price
+                  </th>
+                  <th scope="col" className="py-3 px-4">
+                    Payment Status
+                  </th>
+                  <th scope="col" className="py-3 px-4">
+                    Order Status
+                  </th>
+                  <th scope="col" className="py-3 px-4">
+                    Active
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[1, 2, 3, 4, 5].map((elt, i) => (
+                  <tr>
+                    <td
+                      scope="row"
+                      className="py-3 px-4 font-medium whitespace-nowrap"
+                    >
+                      #34527
+                    </td>
+                    <td
+                      scope="row"
+                      className="py-3 px-4 font-medium whitespace-nowrap"
+                    >
+                      $343
+                    </td>
+                    <td
+                      scope="row"
+                      className="py-3 px-4 font-medium whitespace-nowrap"
+                    >
+                      Pending
+                    </td>
+                    <td
+                      scope="row"
+                      className="py-3 px-4 font-medium whitespace-nowrap"
+                    >
+                      Pending
+                    </td>
+                    <td
+                      scope="row"
+                      className="py-3 px-4 font-medium whitespace-nowrap"
+                    >
+                      <Link>View</Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
