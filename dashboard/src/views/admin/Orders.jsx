@@ -8,6 +8,7 @@ const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [perPage, setPerPage] = useState(5);
+  const [show, setShow] = useState(false);
 
   return (
     <div>
@@ -64,8 +65,222 @@ const Orders = () => {
                   <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
                     <Link>View</Link>
                   </div>
-                  <div className="py-3 w-[8%] font-semibold whitespace-nowrap">
-                    <FaArrowDownWideShort />{" "}
+                  <div
+                    onClick={(e) => setShow(!show)}
+                    className="py-3 w-[8%] font-semibold whitespace-nowrap"
+                  >
+                    <FaArrowDownWideShort />
+                  </div>
+                </div>
+                <div className={show ? "block bg-[#f29f6731]" : "hidden"}>
+                  <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                    <div className="py-3 w-[25%] font-semibold whitespace-nowrap pl-3">
+                      #7458
+                    </div>
+                    <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                      $400
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap"></div>
+                    <div className="py-3 w-[8%] font-semibold whitespace-nowrap"></div>
+                  </div>
+                  <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                    <div className="py-3 w-[25%] font-semibold whitespace-nowrap pl-3">
+                      #7458
+                    </div>
+                    <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                      $52
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap"></div>
+                    <div className="py-3 w-[8%] font-semibold whitespace-nowrap"></div>
+                  </div>
+                </div>
+              </div>
+              <div className=" text-[#1e1e2c]">
+                <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                  <div className="py-3 w-[25%] font-semibold whitespace-nowrap">
+                    #74589
+                  </div>
+                  <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                    $452
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    Pending
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    Pending
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    <Link>View</Link>
+                  </div>
+                  <div
+                    onClick={(e) => setShow(!show)}
+                    className="py-3 w-[8%] font-semibold whitespace-nowrap"
+                  >
+                    <FaArrowDownWideShort />
+                  </div>
+                </div>
+                <div className={show ? "block bg-[#f29f6731]" : "hidden"}>
+                  <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                    <div className="py-3 w-[25%] font-semibold whitespace-nowrap pl-3">
+                      #7458
+                    </div>
+                    <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                      $400
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap"></div>
+                    <div className="py-3 w-[8%] font-semibold whitespace-nowrap"></div>
+                  </div>
+                  <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                    <div className="py-3 w-[25%] font-semibold whitespace-nowrap pl-3">
+                      #7458
+                    </div>
+                    <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                      $52
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap"></div>
+                    <div className="py-3 w-[8%] font-semibold whitespace-nowrap"></div>
+                  </div>
+                </div>
+              </div>
+              <div className=" text-[#1e1e2c]">
+                <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                  <div className="py-3 w-[25%] font-semibold whitespace-nowrap">
+                    #74589
+                  </div>
+                  <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                    $452
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    Pending
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    Pending
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    <Link>View</Link>
+                  </div>
+                  <div
+                    onClick={(e) => setShow(!show)}
+                    className="py-3 w-[8%] font-semibold whitespace-nowrap"
+                  >
+                    <FaArrowDownWideShort />
+                  </div>
+                </div>
+                <div className={show ? "block bg-[#f29f6731]" : "hidden"}>
+                  <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                    <div className="py-3 w-[25%] font-semibold whitespace-nowrap pl-3">
+                      #7458
+                    </div>
+                    <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                      $400
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap"></div>
+                    <div className="py-3 w-[8%] font-semibold whitespace-nowrap"></div>
+                  </div>
+                  <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                    <div className="py-3 w-[25%] font-semibold whitespace-nowrap pl-3">
+                      #7458
+                    </div>
+                    <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                      $52
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap"></div>
+                    <div className="py-3 w-[8%] font-semibold whitespace-nowrap"></div>
+                  </div>
+                </div>
+              </div>
+              <div className=" text-[#1e1e2c]">
+                <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                  <div className="py-3 w-[25%] font-semibold whitespace-nowrap">
+                    #74589
+                  </div>
+                  <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                    $452
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    Pending
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    Pending
+                  </div>
+                  <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                    <Link>View</Link>
+                  </div>
+                  <div
+                    onClick={(e) => setShow(!show)}
+                    className="py-3 w-[8%] font-semibold whitespace-nowrap"
+                  >
+                    <FaArrowDownWideShort />
+                  </div>
+                </div>
+                <div className={show ? "block bg-[#f29f6731]" : "hidden"}>
+                  <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                    <div className="py-3 w-[25%] font-semibold whitespace-nowrap pl-3">
+                      #7458
+                    </div>
+                    <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                      $400
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap"></div>
+                    <div className="py-3 w-[8%] font-semibold whitespace-nowrap"></div>
+                  </div>
+                  <div className="flex justify-between items-start border-b border-[#7f7f7f]">
+                    <div className="py-3 w-[25%] font-semibold whitespace-nowrap pl-3">
+                      #7458
+                    </div>
+                    <div className="py-3 w-[13%] font-semibold whitespace-nowrap">
+                      $52
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap">
+                      Pending
+                    </div>
+                    <div className="py-3 w-[18%] font-semibold whitespace-nowrap"></div>
+                    <div className="py-3 w-[8%] font-semibold whitespace-nowrap"></div>
                   </div>
                 </div>
               </div>
