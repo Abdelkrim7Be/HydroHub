@@ -25,7 +25,7 @@ const Header = ({ showSideBar, setShowSideBar }) => {
             <div className="hidden md:block relative">
               <input
                 type="text"
-                className="px-3 py-2 outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden pl-10"
+                className="px-3 py-2 outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden pl-10 placeholder-black"
                 name="search"
                 placeholder="Search now"
               />

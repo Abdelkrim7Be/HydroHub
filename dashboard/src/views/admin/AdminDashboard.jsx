@@ -247,8 +247,8 @@ const AdminDashboard = () => {
             </Link>
           </div>
           <div className="relative overflow-x-auto">
-            <table className="w-full text-sm text-left text-[#1e1e2c] bg-[#f4b48a61] rounded-lg">
-              <thead className="text-sm uppercase border-b border-[#1e1e2c] ">
+            <table className="w-full text-left text-[#1e1e2c] font-medium text-sm bg-[#f29f6731] rounded-lg">
+              <thead className="text-sm uppercase border-b border-[#7f7f7f] ">
                 <tr>
                   <th scope="col" className="py-3 px-4">
                     Order Id
