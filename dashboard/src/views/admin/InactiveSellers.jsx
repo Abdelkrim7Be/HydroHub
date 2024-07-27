@@ -8,14 +8,14 @@ import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
 
-const Sellers = () => {
+const InactiveSellers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [perPage, setPerPage] = useState(5);
   const [show, setShow] = useState(false);
   return (
     <div className="px-2 lg:px-7 pt-5">
-      <h1 className="text-[20px] font-bold mb-3">Sellers</h1>
+      <h1 className="text-[20px] font-bold mb-3">Inactive Seller</h1>
       <div className="w-full p-4 bg-[#e2e2e2] rounded-md">
         <div className="flex justify-between items-center">
           <select
@@ -50,19 +50,13 @@ const Sellers = () => {
                   Name
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Shop Name
+                  Email
                 </th>
                 <th scope="col" className="py-3 px-4">
                   Payment Status
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Email
-                </th>
-                <th scope="col" className="py-3 px-4">
-                  Devision
-                </th>
-                <th scope="col" className="py-3 px-4">
-                  Locality
+                  Status
                 </th>
                 <th scope="col" className="py-3 px-4">
                   Action
@@ -98,7 +92,7 @@ const Sellers = () => {
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    HMM
+                    soufianeomari@gmail.com
                   </td>
                   <td
                     scope="row"
@@ -110,19 +104,7 @@ const Sellers = () => {
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    soufianeomari@gmail.com
-                  </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Meknes
-                  </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Hamria
+                    Inactive
                   </td>
                   <td
                     scope="row"
@@ -153,4 +135,4 @@ const Sellers = () => {
   );
 };
 
-export default Sellers;
+export default InactiveSellers;
