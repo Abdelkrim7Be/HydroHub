@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { FaImage } from "react-icons/fa6";
+import { IoMdCloseCircle } from "react-icons/io";
 
 const Category = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +17,15 @@ const Category = () => {
   return (
     <div>
       <div className="px-2 lg:px-7 pt-5">
+        <div className="flex lg:hidden justify-between items-center mb-5 p-4 bg-[#f29f6731] rounded-md">
+          <h1 className="text-[#1e1e2c] font-semibold text-lg">Category</h1>
+          <button
+            onClick={() => setShow(true)}
+            className="bg-[#c28f6d] shadow-lg hover:shadow-slate-300 px-4 py-2 curousal-pointer text-white rounded-md text-sm"
+          >
+            Add
+          </button>
+        </div>
         <div className="flex flex-wrap w-full">
           <div className="w-full lg:w-7/12">
             <div className="w-full p-4 bg-[#e2e2e2] rounded-md">
@@ -112,14 +122,22 @@ const Category = () => {
           </div>
           <div
             className={`w-[320px] lg:w-5/12 translate-x-100 lg:relative lg:right-0 fixed ${
-              show ? "right-0" : "-right-[340px]"
+              show ? "right-0" : "-right-[340px] z-[9999]"
             } z-20 top-0 transition-all duration-500`}
           >
             <div className="w-full pl-5">
               <div className="bg-[#e2e2e2] lg:rounded-md h-screen lg:h-auto px-3 py-2 text-[#1e1e2c]">
-                <h1 className="text-[#1e1e2c] font-semibold text-x mb-4 w-full text-center">
-                  Add Category
-                </h1>
+                <div className="flex justify-between items-center">
+                  <h1 className="text-[#1e1e2c] font-semibold text-x mb-4 w-full text-center">
+                    Add Category
+                  </h1>
+                  <div
+                    onClick={() => setShow(false)}
+                    className="block lg:hidden"
+                  >
+                    <IoMdCloseCircle />
+                  </div>
+                </div>
                 <form>
                   <div className="flex flex-col w-full gap-1 mb-3 ">
                     <label htmlFor="name">Category Name</label>

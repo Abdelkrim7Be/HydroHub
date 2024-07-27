@@ -4,7 +4,7 @@ import { IoSearchSharp } from "react-icons/io5";
 
 const Header = ({ showSideBar, setShowSideBar }) => {
   return (
-    <div className="fixed top-0 left-0 w-full py-5 px-2 lg:px-7 z-40">
+    <div className="fixed top-0 left-0 w-full py-5 px-2 lg:px-7 z-10">
       <div className="ml-0 lg:ml-[260px] rounded-md h-[64px] flex justify-between items-center bg-[#e2e2e2] px-5 transition-all">
         <div
           onClick={() => setShowSideBar(!showSideBar)}
