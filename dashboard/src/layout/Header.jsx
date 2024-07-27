@@ -8,11 +8,11 @@ const Header = ({ showSideBar, setShowSideBar }) => {
       <div className="ml-0 lg:ml-[260px] rounded-md h-[64px] flex justify-between items-center bg-[#e2e2e2] px-5 transition-all">
         <div
           onClick={() => setShowSideBar(!showSideBar)}
-          className={`w-[40px] h-[40px] flex lg:hidden rounded-2xl bg-[#f29f6747] text-[#1e1e2c] font-medium text-sm hover:bg-[#f29f6782] hover:text-white shadow-lg justify-center items-center cursor-pointer transition-all duration-200`}
+          className={`w-[40px] h-[40px] flex lg:hidden rounded-2xl bg-[#f29f6747] text-[#1e1e2c] font-medium text-sm hover:bg-[#f29f6782] hover:text-white shadow-lg justify-center items-center cursor-pointer transition-all duration-200 ml-auto`}
         >
           <FaList />
         </div>
-        <div className="flex justify-between items-center w-full p-4">
+        <div className="hidden md:flex justify-between items-center w-full p-4">
           <div className="hidden md:block">
             <h1 className="text-lg font-light text-[#1e1e2c]">
               Good Morning,{" "}

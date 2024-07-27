@@ -21,9 +21,9 @@ const SideBar = ({ showSideBar, setShowSideBar }) => {
         } w-screen h-screen bg-[#e2e2e2] top-0 left-0 z-10`}
       ></div>
       <div
-        className={`fixed top-0 left-0 w-[260px] h-screen bg-[#e2e2e2] shadow-md z-50 transition-all flex flex-col justify-between ${
+        className={`w-[260px] fixed bg-[#e2e2e2] z-50 top-0 h-screen  transition-all ${
           showSideBar ? "left-0" : "-left-[260px] lg:left-0"
-        }`}
+        } `}
       >
         <div>
           <div className="h-[100px] flex justify-center items-center">
