@@ -59,7 +59,7 @@ export const allNav = [
     title: "Profil",
     icon: <FaUser />,
     role: "admin",
-    path: "/admin/dashboard/profil",
+    path: "/admin/dashboard/profile",
   },
   {
     id: 9,
