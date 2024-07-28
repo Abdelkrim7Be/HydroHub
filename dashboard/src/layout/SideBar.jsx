@@ -21,7 +21,7 @@ const SideBar = ({ showSideBar, setShowSideBar }) => {
         } w-screen h-screen bg-[#e2e2e2] top-0 left-0 z-10`}
       ></div>
       <div
-        className={`w-[260px] fixed bg-[#e6e7fb] z-50 top-0 h-screen  transition-all ${
+        className={`w-[260px] fixed bg-[#e2e2e2] z-50 top-0 h-screen  transition-all ${
           showSideBar ? "left-0" : "-left-[260px] lg:left-0"
         } `}
       >

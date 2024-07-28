@@ -56,7 +56,7 @@ export const allNav = [
   },
   {
     id: 8,
-    title: "Profil",
+    title: "Profile",
     icon: <FaUser />,
     role: "admin",
     path: "/admin/dashboard/profile",
