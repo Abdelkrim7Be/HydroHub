@@ -4,6 +4,10 @@ import { FaUser, FaUsers, FaUserTimes } from "react-icons/fa";
 import { FaCodePullRequest } from "react-icons/fa6";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IoIosChatbubbles } from "react-icons/io";
+import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { MdDiscount } from "react-icons/md";
+import { IoChatbubblesOutline } from "react-icons/io5";
+
 export const allNav = [
   {
     id: 1,
@@ -67,5 +71,61 @@ export const allNav = [
     icon: <IoIosChatbubbles />,
     role: "admin",
     path: "/admin/dashboard/chat-seller",
+  },
+  {
+    id: 10,
+    title: "Dashboard",
+    icon: <MdDashboard />,
+    role: "seller",
+    path: "/seller/dashboard",
+  },
+  {
+    id: 11,
+    title: "Add Product",
+    icon: <MdOutlineProductionQuantityLimits />,
+    role: "seller",
+    path: "/seller/dashboard/add-product",
+  },
+  {
+    id: 12,
+    title: "All Products",
+    icon: <MdOutlineProductionQuantityLimits />,
+    role: "seller",
+    path: "/seller/dashboard/all-products",
+  },
+  {
+    id: 13,
+    title: "Discount Product",
+    icon: <MdDiscount />,
+    role: "seller",
+    path: "/seller/dashboard/discount-product",
+  },
+  {
+    id: 14,
+    title: "Orders",
+    icon: <AiOutlineShoppingCart />,
+    role: "seller",
+    path: "/seller/dashboard/orders",
+  },
+  {
+    id: 15,
+    title: "Payments",
+    icon: <MdPayment />,
+    role: "seller",
+    path: "/seller/dashboard/payments",
+  },
+  {
+    id: 16,
+    title: "Chat-Customer",
+    icon: <IoIosChatbubbles />,
+    role: "seller",
+    path: "/seller/dashboard/chat-customer",
+  },
+  {
+    id: 17,
+    title: "Chat-Support",
+    icon: <IoChatbubblesOutline />,
+    role: "seller",
+    path: "/seller/dashboard/chat-support",
   },
 ];
