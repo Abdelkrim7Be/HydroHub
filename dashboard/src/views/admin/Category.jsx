@@ -151,7 +151,7 @@ const Category = () => {
                   </div>
                   <div>
                     <label
-                      className="flex justify-center items-center flex-col h-[250px] cursor-pointer border border-dashed border-[#f29f67]"
+                      className="flex justify-center items-center flex-col h-[250px] cursor-pointer border border-dashed border-[#f29f67] hover:border-[#7b7b7b]"
                       htmlFor="image"
                     >
                       <span>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaImage } from "react-icons/fa6";
+import { IoMdCloseCircle } from "react-icons/io";
 
 const AddProduct = () => {
   const categories = [
@@ -29,6 +31,8 @@ const AddProduct = () => {
   const [category, setCategory] = useState("");
   const [allCategory, setAllCategory] = useState(categories);
   const [searchValue, setSearchValue] = useState("");
+  const [images, setImages] = useState([]);
+  const [imageShow, setImageShow] = useState([]);
 
   const [state, setState] = useState({
     name: "",
@@ -57,6 +61,44 @@ const AddProduct = () => {
     } else {
       setAllCategory(categories);
     }
+  };
+
+  const imageHandler = (e) => {
+    const files = e.target.files;
+    const length = files.length;
+    if (length > 0) {
+      setImages([...images, ...files]);
+      let imageUrl = [];
+      for (let i = 0; i < length; i++) {
+        imageUrl.push({ url: URL.createObjectURL(files[i]) });
+      }
+      setImageShow([...imageShow, ...imageUrl]);
+    }
+    // console.log(e.target.files);
+  };
+
+  // console.log(images);
+  // console.log(imageShow);
+
+  const changeImage = (img, index) => {
+    if (img) {
+      let tempUrl = imageShow;
+      let tempImages = images;
+      tempImages[index] = img;
+      tempUrl[index] = { url: URL.createObjectURL(img) };
+      setImageShow([...tempUrl]);
+      setImages([...tempImages]);
+    }
+  };
+
+  const removeImage = (i) => {
+    const selectKeepingImages = images.filter((img, index) => index !== i);
+    const selectKeepingImagesUrl = imageShow.filter(
+      (img, index) => index !== i
+    );
+
+    setImages(selectKeepingImages);
+    setImageShow(selectKeepingImagesUrl);
   };
 
   return (
@@ -186,7 +228,7 @@ const AddProduct = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 mb-5">
               <label htmlFor="description">Description</label>
               <textarea
                 className="w-full outline-none bg-white flex items-center border border-gray-50 rounded-lg p-2"
@@ -195,9 +237,55 @@ const AddProduct = () => {
                 name="description"
                 id="description"
                 placeholder="Description"
-                cols="10"
+                cols="5"
                 rows="4"
               ></textarea>
+            </div>
+            <div className="grid lg:grid-col-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-[#1e1e2c] mb-4">
+              {imageShow.map((img, i) => (
+                <div className="h-[180px] relative" key={i}>
+                  <label htmlFor={i}>
+                    <img
+                      className="w-full h-full rounded-sm"
+                      src={img.url}
+                      alt=""
+                    />
+                  </label>
+                  <input
+                    onChange={(e) => changeImage(e.target.files[i], i)}
+                    type="file"
+                    id={i}
+                    className="hidden"
+                  />
+                  <span
+                    onClick={() => removeImage(i)}
+                    className="p-2 z-10 cursor-pointer bg-[#f29f67] hover:shadow-lg hover:shadow-slate-400/50 text-white absolute top-1 right-1 rounded-full"
+                  >
+                    <IoMdCloseCircle />
+                  </span>
+                </div>
+              ))}
+              <label
+                className="flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed border-[#f29f67] hover:border-[#7b7b7b] w-full text-[#1e1e2c]"
+                htmlFor="image"
+              >
+                <span>
+                  <FaImage />
+                </span>
+                <span>Select Image</span>
+              </label>
+              <input
+                className="hidden"
+                onChange={imageHandler}
+                multiple
+                type="file"
+                id="image"
+              />
+            </div>
+            <div className="flex">
+              <button className="bg-[#c28f6d]  hover:shadow-slate-300 hover:shadow-md text-white rounded-md px-7 py-2 my-3">
+                Add Product
+              </button>
             </div>
           </form>
         </div>
