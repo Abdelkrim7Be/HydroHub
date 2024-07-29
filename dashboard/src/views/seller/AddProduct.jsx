@@ -25,7 +25,11 @@ const AddProduct = () => {
     },
   ];
 
+  const [catShow, setCatShow] = useState(false);
   const [category, setCategory] = useState("");
+  const [allCategory, setAllCategory] = useState(categories);
+  const [searchValue, setSearchValue] = useState("");
+
   const [state, setState] = useState({
     name: "",
     description: "",
@@ -40,6 +44,19 @@ const AddProduct = () => {
       ...state,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const categorySearch = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    if (value) {
+      let searchValue = allCategory.filter(
+        (cat) => cat.name.toLowerCase().indexOf(value.toLowerCase()) > -1
+      );
+      setAllCategory(searchValue);
+    } else {
+      setAllCategory(categories);
+    }
   };
 
   return (
@@ -83,16 +100,52 @@ const AddProduct = () => {
               </div>
             </div>
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text[#1e1e2c]">
-              <div className="flex flex-col w-full gap-1">
+              <div className="flex flex-col w-full gap-1 relative">
                 <label htmlFor="category">Category</label>
                 <input
+                  readOnly
+                  onClick={() => setCatShow(!catShow)}
                   className="w-full outline-none bg-white flex items-center border border-gray-50 rounded-lg p-2"
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={inputHandler}
                   value={category}
                   type="text"
                   id="category"
-                  placeholder="Category"
+                  placeholder="--Select Category--"
                 />
+                <div
+                  className={`absolute top-[102%] w-full transition-all mt-2 ${
+                    catShow ? "scale-100" : "scale-0"
+                  }`}
+                >
+                  <div className="w-full px-4 py-2 fixed bg-white rounded-md">
+                    <input
+                      value={searchValue}
+                      onChange={categorySearch}
+                      className="px-3 py-1 w-full outline-none border bg-[#f29f6731] text-[#1e1e2c] focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-md shadow-lg focus:border-stone-300 overflow-hidden placeholder-black"
+                      type="text"
+                      placeholder="Search"
+                    />
+                    <div className="pt-5"></div>
+                    <div className="flex justify-start items-start flex-col h-[200px] overflow-x-scrool">
+                      {allCategory.map((cat, i) => (
+                        <span
+                          className={`px-4 py-2 hover:bg-[#f29f6731]  hover:shadow-lg w-full cursor-pointer ${
+                            category === cat.name && "bg-[#f29f6731]"
+                          }`}
+                          onClick={() => {
+                            setCatShow(false);
+                            setCategory(cat.name);
+                            setSearchValue("");
+                            setAllCategory(categories);
+                          }}
+                          key={cat.id}
+                        >
+                          {cat.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="flex flex-col w-full gap-1">
                 <label htmlFor="stock">Product Stock</label>
