@@ -108,7 +108,7 @@ const AddProduct = () => {
           <h1 className="text-[#1e1e2c] text-xl font-semibold">Add Product</h1>
           <Link
             className="bg-[#f29f6782] shadow-lg hover:shadow-slate-300 px-7 py-2 curousal-pointer text-white rounded-md text-sm my-2"
-            to="/all-products"
+            to="/seller/dashboard/products"
           >
             All Products
           </Link>

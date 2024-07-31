@@ -1,7 +1,7 @@
 import React from "react";
 import { IoSearchSharp } from "react-icons/io5";
 
-const Search = ({ setPerPage }) => {
+const Search = ({ setPerPage, setSearchValue, searchValue }) => {
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -15,6 +15,8 @@ const Search = ({ setPerPage }) => {
         </select>
         <div className="hidden md:block relative">
           <input
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
             type="text"
             className="px-3 py-2 outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden pl-10 placeholder-black"
             name="search"
