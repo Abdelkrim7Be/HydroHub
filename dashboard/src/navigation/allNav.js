@@ -91,7 +91,7 @@ export const allNav = [
     title: "All Products",
     icon: <MdOutlineProductionQuantityLimits />,
     role: "seller",
-    path: "/seller/dashboard/all-products",
+    path: "/seller/dashboard/products",
   },
   {
     id: 13,
