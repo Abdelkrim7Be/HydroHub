@@ -5,15 +5,13 @@ import Pagination from "../Pagination";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import Search from "./../components/Search";
 
-const Products = () => {
+const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [perPage, setPerPage] = useState(5);
   return (
     <div className="px-2 lg:px-7 pt-5">
-      <h1 className="text-[#1e1e2c] font-semibold text-lg mb-3">
-        All Products
-      </h1>
+      <h1 className="text-[#1e1e2c] font-semibold text-lg mb-3">Orders</h1>
       <div className="w-full p-4 bg-[#e2e2e2] rounded-md">
         <Search
           setPerPage={setPerPage}
@@ -26,28 +24,16 @@ const Products = () => {
             <thead className="text-sm uppercase border-b border-[#7f7f7f] ">
               <tr>
                 <th scope="col" className="py-3 px-4">
-                  No
+                  Order Id
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Image
+                  price
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Name
+                  Payment Status
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Category
-                </th>
-                <th scope="col" className="py-3 px-4">
-                  Brand
-                </th>
-                <th scope="col" className="py-3 px-4">
-                  Price
-                </th>
-                <th scope="col" className="py-3 px-4">
-                  Discount
-                </th>
-                <th scope="col" className="py-3 px-4">
-                  Stock
+                  Order Status
                 </th>
                 <th scope="col" className="py-3 px-4">
                   Action
@@ -61,35 +47,7 @@ const Products = () => {
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    {elt}
-                  </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    <img
-                      className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/category/${elt}.jpg`}
-                      alt=""
-                    />
-                  </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Bouchon à emboit
-                  </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Bouchon
-                  </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    HMM
+                    #5236
                   </td>
                   <td
                     scope="row"
@@ -101,13 +59,13 @@ const Products = () => {
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    15%
+                    Pending
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    20
+                    Pending
                   </td>
                   <td
                     scope="row"
@@ -115,13 +73,7 @@ const Products = () => {
                   >
                     <div className="flex justify-start items-start gap-4">
                       <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
-                        <FaEdit />
-                      </Link>
-                      <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
                         <FaEye />
-                      </Link>
-                      <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
-                        <FaTrash />
                       </Link>
                     </div>
                   </td>
@@ -144,4 +96,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Orders;

@@ -21,7 +21,7 @@ const DiscountProducts = () => {
           setSearchValue={setSearchValue}
         />
 
-        <div className="mt-5 relative overflow-x-auto mt-5">
+        <div className="relative overflow-x-auto mt-5">
           <table className="w-full text-left text-[#1e1e2c] font-medium text-sm bg-[#e2e2e2] rounded-lg">
             <thead className="text-sm uppercase border-b border-[#7f7f7f] ">
               <tr>
