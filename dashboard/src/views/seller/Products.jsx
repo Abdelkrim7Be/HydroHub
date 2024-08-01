@@ -114,7 +114,10 @@ const Products = () => {
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
                     <div className="flex justify-start items-start gap-4">
-                      <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
+                      <Link
+                        to={`/seller/dashboard/edit-product/35`}
+                        className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300"
+                      >
                         <FaEdit />
                       </Link>
                       <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
