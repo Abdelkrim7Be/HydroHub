@@ -116,13 +116,20 @@ export const allNav = [
   },
   {
     id: 16,
+    title: "Profile",
+    icon: <FaUser />,
+    role: "seller",
+    path: "/seller/dashboard/profile",
+  },
+  {
+    id: 17,
     title: "Chat-Customer",
     icon: <IoIosChatbubbles />,
     role: "seller",
     path: "/seller/dashboard/chat-customer",
   },
   {
-    id: 17,
+    id: 18,
     title: "Chat-Support",
     icon: <IoChatbubblesOutline />,
     role: "seller",
