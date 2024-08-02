@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import LoadingSpinner from "./../../layout/loadingSpinner";
+import { overrideStyle } from "../../utilities/utilities";
+import { sellerRegister } from "../../store/Reducers/authReducer";
 
 const Register = () => {
-  const loader = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { loader } = useSelector((state) => state.auth);
 
   const [state, setState] = useState({
     name: "",
@@ -23,12 +27,7 @@ const Register = () => {
 
   const submit = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log(state);
-      setIsSubmitting(false);
-    }, 2000);
+    dispatch(sellerRegister(state));
   };
   return (
     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4 flex-col">
@@ -171,13 +170,15 @@ const Register = () => {
               </div>
               <div>
                 <button
+                  disabled={loader ? true : false}
                   type="submit"
                   className="w-full px-7 py-2 my-3 bg-[#c28f6d] hover:shadow-slate-300 hover:shadow-md text-white rounded-md"
                 >
-                  {isSubmitting ? (
-                    <span className="loader"></span>
+                  {loader ? (
+                    // <LoadingSpinner cssOverride={overrideStyle} />
+                    <LoadingSpinner />
                   ) : (
-                    "Create Account"
+                    "Sign Up"
                   )}
                 </button>
               </div>

@@ -4,5 +4,6 @@ const router = require("express").Router();
 
 router.post("/admin-login", authControllers.adminLogin);
 router.get("/get-user", authMiddleware, authControllers.getUser);
+router.post("/seller-register", authControllers.sellerRegister);
 
 module.exports = router;

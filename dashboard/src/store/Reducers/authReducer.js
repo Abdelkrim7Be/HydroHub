@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api/api";
 
 export const adminLogin = createAsyncThunk(
-  "auth/AdminLogin",
+  "auth/admin-login",
   async (info, { rejectWithValue, fulfillWithValue }) => {
     console.log(info);
     try {
@@ -12,6 +12,24 @@ export const adminLogin = createAsyncThunk(
       // I want to store the data in my localStorage
       localStorage.setItem("accessToken", data.token);
       // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      // console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const sellerRegister = createAsyncThunk(
+  "auth/seller-register",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      console.log(info);
+      const { data } = await api.post("/seller-register", info, {
+        withCredentials: true,
+      });
+      // I want to store the data in my localStorage
+      // localStorage.setItem("accessToken", data.token);
+      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       // console.log(error.response.data);
