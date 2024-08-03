@@ -141,12 +141,12 @@ const authReducer = createSlice({
       .addCase(sellerLogin.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message; //because we passed the message when login Success from the controller
+        state.token = payload.token;
+        state.role = getRole(payload.token);
       })
       .addCase(getUserInfo.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.userInfo = payload.userInfo; //because we passed the message when login Success from the controller
-        state.token = payload.token;
-        state.role = getRole(payload.token);
       });
   },
 });

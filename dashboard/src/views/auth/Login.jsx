@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import LoadingSpinner from "./../../layout/loadingSpinner";
@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import { sellerLogin, messageClear } from "../../store/Reducers/authReducer";
 
 const Login = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { loader, errorMessage, successMessage } = useSelector(
@@ -38,6 +39,7 @@ const Login = () => {
     if (successMessage) {
       toast.success(successMessage);
       dispatch(messageClear());
+      navigate("/");
     }
   }, [successMessage, errorMessage]);
 
