@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import LoadingSpinner from "./../../layout/loadingSpinner";
+import { overrideStyle } from "../../utilities/utilities";
+import { toast } from "react-hot-toast";
+import { sellerLogin, messageClear } from "../../store/Reducers/authReducer";
 
 const Login = () => {
+  const dispatch = useDispatch();
+
+  const { loader, errorMessage, successMessage } = useSelector(
+    (state) => state.auth
+  );
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -17,8 +28,18 @@ const Login = () => {
 
   const submit = (e) => {
     e.preventDefault();
-    console.log(state);
+    dispatch(sellerLogin(state));
   };
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
 
   return (
     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4 flex-col">
@@ -40,7 +61,7 @@ const Login = () => {
             <div className="space-y-6">
               <button
                 type="button"
-                className="w-full px-5 py-2.5 flex items-center justify-center rounded-md text-white text-base tracking-wider font-semibold border-none outline-none bg-[#c28f6d] hover:shadow-slate-300 hover:shadow-md"
+                className="w-full px-5 py-2.5 flex items-center justify-center rounded-md text-white text-base tracking-wider font-semibold border-none outline-none bg-[#c28f6d]  hover:bg-[#a0765d] hover:shadow-md"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -144,10 +165,11 @@ const Login = () => {
               </div>
               <div>
                 <button
+                  disabled={loader ? true : false}
                   type="submit"
                   className="w-full py-3 px-3 text-sm tracking-wide rounded-lg text-white bg-[#c28f6d] hover:bg-[#a0765d]"
                 >
-                  Login
+                  {loader ? <LoadingSpinner /> : "Sign In"}
                 </button>
               </div>
               <div>
