@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api/api";
+import { jwtDecode } from "jwt-decode";
 
 export const adminLogin = createAsyncThunk(
   "auth/admin-login",
@@ -55,6 +56,36 @@ export const sellerRegister = createAsyncThunk(
     }
   }
 );
+export const getUserInfo = createAsyncThunk(
+  "auth/get-user-info",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get("/get-user", {
+        withCredentials: true,
+      });
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      // console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getRole = (token) => {
+  if (token) {
+    const decodeToken = jwtDecode(token);
+    const expireTime = new Date(decodeToken.exp * 1000);
+    if (new Date() > expireTime) {
+      localStorage.removeItem("accessToken");
+      return "";
+    } else {
+      return decodeToken.role;
+    }
+  } else {
+    return;
+  }
+};
 
 const authReducer = createSlice({
   name: "auth",
@@ -63,6 +94,8 @@ const authReducer = createSlice({
     errorMessage: "",
     loader: false,
     userInfo: "",
+    role: getRole(localStorage.getItem("accessToken")),
+    token: localStorage.getItem("accessToken"),
   },
   reducers: {
     messageClear: (state, payload) => {
@@ -82,6 +115,8 @@ const authReducer = createSlice({
       .addCase(adminLogin.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message; //because we passed the message when login Success from the controller
+        state.token = payload.token;
+        state.role = getRole(payload.token);
       })
       .addCase(sellerRegister.pending, (state, { payload }) => {
         state.loader = true;
@@ -93,6 +128,8 @@ const authReducer = createSlice({
       .addCase(sellerRegister.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message; //because we passed the message when login Success from the controller
+        state.token = payload.token;
+        state.role = getRole(payload.token);
       })
       .addCase(sellerLogin.pending, (state, { payload }) => {
         state.loader = true;
@@ -104,6 +141,12 @@ const authReducer = createSlice({
       .addCase(sellerLogin.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message; //because we passed the message when login Success from the controller
+      })
+      .addCase(getUserInfo.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = payload.userInfo; //because we passed the message when login Success from the controller
+        state.token = payload.token;
+        state.role = getRole(payload.token);
       });
   },
 });
