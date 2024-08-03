@@ -1,8 +1,10 @@
 const adminModel = require("../models/adminModel");
 const sellerModel = require("../models/sellerModel");
+const sellerCustomerModel = require("../models/chat/sellerCustomerModel");
 const { responseReturn } = require("../utilities/response");
 const { createToken } = require("../utilities/tokenCreate");
 const bcrypt = require("bcrypt");
+const { response } = require("express");
 
 class authControllers {
   adminLogin = async (req, res) => {
@@ -50,11 +52,21 @@ class authControllers {
           method: "manually",
           shopInfo: {},
         });
-        console.log(seller);
+        await sellerCustomerModel.create({
+          myId: seller._id,
+        });
+
+        const token = await createToken({
+          id: seller._id,
+          role: seller.role,
+        });
+        res.cookie("accessToken", token, {
+          expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        });
+        responseReturn(res, 201, { token, message: "Register Success" });
       }
     } catch (error) {
-      console.log(error);
-      responseReturn(res, 500, { error: error.message });
+      responseReturn(res, 500, { error: "Internal Server Error" });
     }
   };
 

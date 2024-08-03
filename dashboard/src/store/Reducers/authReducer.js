@@ -23,13 +23,13 @@ export const sellerRegister = createAsyncThunk(
   "auth/seller-register",
   async (info, { rejectWithValue, fulfillWithValue }) => {
     try {
-      console.log(info);
+      // console.log(info);
       const { data } = await api.post("/seller-register", info, {
         withCredentials: true,
       });
       // I want to store the data in my localStorage
       // localStorage.setItem("accessToken", data.token);
-      console.log(data);
+      // console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       // console.log(error.response.data);
