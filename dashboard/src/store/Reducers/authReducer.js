@@ -28,7 +28,7 @@ export const sellerRegister = createAsyncThunk(
         withCredentials: true,
       });
       // I want to store the data in my localStorage
-      // localStorage.setItem("accessToken", data.token);
+      localStorage.setItem("accessToken", data.token);
       // console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
@@ -62,6 +62,17 @@ const authReducer = createSlice({
         state.errorMessage = payload.error;
       })
       .addCase(adminLogin.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message; //because we passed the message when login Success from the controller
+      })
+      .addCase(sellerRegister.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(sellerRegister.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+      .addCase(sellerRegister.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message; //because we passed the message when login Success from the controller
       });

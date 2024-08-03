@@ -1,22 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import LoadingSpinner from "./../../layout/loadingSpinner";
 import { overrideStyle } from "../../utilities/utilities";
-import { sellerRegister } from "../../store/Reducers/authReducer";
+import { sellerRegister, messageClear } from "../../store/Reducers/authReducer";
+import { toast } from "react-hot-toast";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const { loader } = useSelector((state) => state.auth);
+  const { loader, successMessage, errorMessage } = useSelector(
+    (state) => state.auth
+  );
 
   const [state, setState] = useState({
     name: "",
     email: "",
     password: "",
   });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const inputHandler = (e) => {
     setState({
@@ -29,6 +30,17 @@ const Register = () => {
     e.preventDefault();
     dispatch(sellerRegister(state));
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
   return (
     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4 flex-col">
       <div>
