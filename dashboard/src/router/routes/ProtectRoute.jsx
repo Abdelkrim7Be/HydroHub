@@ -6,7 +6,7 @@ const ProtectRoute = ({ route, children }) => {
   const { role, userInfo } = useSelector((state) => state.auth);
   if (role) {
     if (userInfo) {
-      if (userInfo.role === route.role) {
+      if (role === route.role) {
         return <Suspense fallback={null}>{children}</Suspense>;
       } else {
         return <Navigate to="/unauthorized" replace />;
