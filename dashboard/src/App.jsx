@@ -22,6 +22,7 @@ function App() {
       dispatch(getUserInfo());
     }
   }, []);
+
   return (
     <div>
       <Toaster position="top-right" />
