@@ -14,8 +14,20 @@ const SupportChat = lazy(() => import("./../../views/seller/SupportChat"));
 const CustomerChat = lazy(() => import("./../../views/seller/CustomerChat"));
 const Profile = lazy(() => import("./../../views/seller/Profile"));
 const EditProduct = lazy(() => import("./../../views/seller/EditProduct"));
+const Pending = lazy(() => import("./../../views/Pending"));
+const Inactive = lazy(() => import("./../../views/Inactive"));
 
 export const sellerRoutes = [
+  {
+    path: "/seller/account-pending",
+    element: <Pending />,
+    ability: "seller",
+  },
+  {
+    path: "/seller/account-inactive",
+    element: <Inactive />,
+    ability: "seller",
+  },
   {
     path: "/seller/dashboard",
     element: <SellerDashboard />,
@@ -50,13 +62,13 @@ export const sellerRoutes = [
     path: "/seller/dashboard/orders",
     element: <Orders />,
     role: "seller",
-    status: ["active", "inactive"],
+    visibility: ["active", "inactive"],
   },
   {
     path: "/seller/dashboard/order/details/:orderId",
     element: <OrderDetails />,
     role: "seller",
-    status: ["active", "inactive"],
+    visibility: ["active", "inactive"],
   },
   {
     path: "/seller/dashboard/payments",
@@ -68,7 +80,7 @@ export const sellerRoutes = [
     path: "/seller/dashboard/chat-support",
     element: <SupportChat />,
     role: "seller",
-    status: ["active", "inactive", "pending"],
+    visibility: ["active", "inactive", "pending"],
   },
   {
     path: "/seller/dashboard/chat-customer/:customerId",

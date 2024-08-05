@@ -21,7 +21,7 @@ function App() {
     if (token) {
       dispatch(getUserInfo());
     }
-  }, []);
+  }, [token]);
 
   return (
     <div>
