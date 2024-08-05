@@ -7,12 +7,42 @@ import Pagination from "../Pagination";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
+import LoadingSpinner from "./../../layout/loadingSpinner";
+import { overrideStyle } from "../../utilities/utilities";
+import { addCategory } from "../../store/Reducers/categoryReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const Category = () => {
+  const dispatch = useDispatch();
+  const { loader } = useSelector((state) => state.category);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [perPage, setPerPage] = useState(5);
   const [show, setShow] = useState(false);
+  const [imageShow, setImageShow] = useState("");
+
+  const [state, setState] = useState({
+    name: "",
+    image: "",
+  });
+
+  const imageHandler = (e) => {
+    let files = e.target.files;
+    if (files.length > 0) {
+      setImageShow(URL.createObjectURL(files[0]));
+      setState({
+        ...state,
+        image: files[0],
+      });
+    }
+  };
+
+  const addingCategory = (e) => {
+    e.preventDefault();
+    // console.log(state)
+    dispatch(addCategory(state));
+  };
 
   return (
     <div>
@@ -68,7 +98,7 @@ const Category = () => {
                   </thead>
                   <tbody>
                     {[1, 2, 3, 4, 5].map((elt, i) => (
-                      <tr>
+                      <tr key={i}>
                         <td
                           scope="row"
                           className="py-1 px-4 font-medium whitespace-nowrap"
@@ -138,10 +168,14 @@ const Category = () => {
                     <IoMdCloseCircle />
                   </div>
                 </div>
-                <form>
+                <form onSubmit={addingCategory}>
                   <div className="flex flex-col w-full gap-1 mb-3 ">
                     <label htmlFor="name">Category Name</label>
                     <input
+                      value={state.name}
+                      onChange={(e) =>
+                        setState({ ...state, name: e.target.value })
+                      }
                       className="px-3 py-2 outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-md shadow-lg focus:border-stone-300 overflow-hidden pl-4 placeholder-black"
                       type="text"
                       id="name"
@@ -154,20 +188,31 @@ const Category = () => {
                       className="flex justify-center items-center flex-col h-[250px] cursor-pointer border border-dashed border-[#f29f67] hover:border-[#7b7b7b]"
                       htmlFor="image"
                     >
-                      <span>
-                        <FaImage />
-                      </span>
-                      <span>Select Image</span>
+                      {imageShow ? (
+                        <img className="w-full h-full" src={imageShow} />
+                      ) : (
+                        <>
+                          <span>
+                            <FaImage />
+                          </span>
+                          <span>Select Image</span>
+                        </>
+                      )}
                     </label>
                     <input
+                      onChange={imageHandler}
                       className="hidden"
                       type="file"
                       name="image"
                       id="image"
                     />
                     <div>
-                      <button className="bg-[#c28f6d] w-full hover:shadow-slate-300 hover:shadow-md text-white rounded-md px-7 py-2 my-3">
-                        Add Category
+                      <button
+                        disabled={loader ? true : false}
+                        type="submit"
+                        className="bg-[#c28f6d] w-full hover:shadow-slate-300 hover:shadow-md text-white rounded-md px-7 py-2 my-3"
+                      >
+                        {loader ? <LoadingSpinner /> : "Add Category"}
                       </button>
                     </div>
                   </div>
