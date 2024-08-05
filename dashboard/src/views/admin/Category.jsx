@@ -1,7 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
-import { FaArrowDownWideShort } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -9,12 +7,18 @@ import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
 import LoadingSpinner from "./../../layout/loadingSpinner";
 import { overrideStyle } from "../../utilities/utilities";
-import { addCategory } from "../../store/Reducers/categoryReducer";
+import {
+  addCategory,
+  messageClear,
+} from "../../store/Reducers/categoryReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 
 const Category = () => {
   const dispatch = useDispatch();
-  const { loader } = useSelector((state) => state.category);
+  const { loader, successMessage, errorMessage } = useSelector(
+    (state) => state.category
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
@@ -43,6 +47,22 @@ const Category = () => {
     // console.log(state)
     dispatch(addCategory(state));
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+      setState({
+        name: "",
+        image: "",
+      });
+      setImageShow("");
+    }
+  }, [successMessage, errorMessage]);
 
   return (
     <div>
