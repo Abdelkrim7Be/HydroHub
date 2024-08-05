@@ -48,6 +48,7 @@ const categoryReducer = createSlice({
     errorMessage: "",
     loader: false,
     categories: [],
+    totalCategory: 0,
   },
   reducers: {
     messageClear: (state, payload) => {
@@ -68,6 +69,10 @@ const categoryReducer = createSlice({
         state.loader = false;
         state.successMessage = payload.message;
         state.categories = [...state.categories, payload.category];
+      })
+      .addCase(getCategory.fulfilled, (state, { payload }) => {
+        state.totalCategory = payload.totalCategory;
+        state.categories = payload.categories;
       });
   },
 });
