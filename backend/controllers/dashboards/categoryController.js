@@ -1,5 +1,7 @@
 const formidable = require("formidable");
 const { responseReturn } = require("../../utilities/response");
+const cloudinary = require("cloudinary").v2;
+const categoryModel = require("../../models/categoryModel");
 
 class categoryController {
   addCategory = async (req, res) => {
@@ -23,10 +25,29 @@ class categoryController {
         name = name.trim();
         const slug = name.split(" ").join("-");
 
-        // responseReturn(res, 201, {
-        //   message: "Category added successfully",
-        //   data: { name, slug, image },
-        // });
+        cloudinary.config({
+          cloud_name: process.env.cloud_name,
+          api_key: process.env.api_key,
+          api_secret: process.env.api_secret,
+          secure: true,
+        });
+
+        const result = await cloudinary.uploader.upload(image.filepath, {
+          folder: "categories",
+        });
+        if (result) {
+          const category = await categoryModel.create({
+            name,
+            slug,
+            image: result.url,
+          });
+          responseReturn(res, 201, {
+            category,
+            message: "Category added successfully",
+          });
+        } else {
+          responseReturn(res, 404, { error: "Image Upload Failed" });
+        }
       } catch (error) {
         responseReturn(res, 500, { error: "Internal Server Error" });
       }
