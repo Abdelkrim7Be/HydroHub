@@ -9,10 +9,12 @@ import LoadingSpinner from "./../../layout/loadingSpinner";
 import { overrideStyle } from "../../utilities/utilities";
 import {
   addCategory,
+  getCategory,
   messageClear,
 } from "../../store/Reducers/categoryReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
+import Search from "./../components/Search";
 
 const Category = () => {
   const dispatch = useDispatch();
@@ -64,6 +66,18 @@ const Category = () => {
     }
   }, [successMessage, errorMessage]);
 
+  // console.log(perPage);
+  // console.log(searchValue);
+
+  useEffect(() => {
+    const obj = {
+      perPage: parseInt(perPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getCategory(obj));
+  }, [searchValue, currentPage, perPage]);
+
   return (
     <div>
       <div className="px-2 lg:px-7 pt-5">
@@ -79,25 +93,11 @@ const Category = () => {
         <div className="flex flex-wrap w-full">
           <div className="w-full lg:w-7/12">
             <div className="w-full p-4 bg-[#e2e2e2] rounded-md">
-              <div className="flex justify-between items-center">
-                <select
-                  onChange={(e) => setPerPage(parseInt(e.target.value))}
-                  className="px-4 py-2  outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden"
-                >
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                </select>
-                <div className="hidden md:block relative">
-                  <input
-                    type="text"
-                    className="px-3 py-2 outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden pl-10 placeholder-black"
-                    name="search"
-                    placeholder="Search"
-                  />
-                  <IoSearchSharp className="absolute top-1/2 left-3 transform -translate-y-1/2 text-[#1e1e2c]" />
-                </div>
-              </div>
+              <Search
+                setPerPage={setPerPage}
+                setSearchValue={setSearchValue}
+                searchValue={searchValue}
+              />
               <div className="mt-5 relative overflow-x-auto">
                 <table className="w-full text-left text-[#1e1e2c] font-medium text-sm bg-[#e2e2e2] rounded-lg">
                   <thead className="text-sm uppercase border-b border-[#7f7f7f] ">
