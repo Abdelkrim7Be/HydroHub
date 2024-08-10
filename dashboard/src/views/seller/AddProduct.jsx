@@ -1,35 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategory } from "../../store/Reducers/categoryReducer";
 
 const AddProduct = () => {
-  const categories = [
-    {
-      id: 1,
-      name: "Pompes_1",
-    },
-    {
-      id: 2,
-      name: "Pompes_2",
-    },
-    {
-      id: 3,
-      name: "Pompes_3",
-    },
-    {
-      id: 4,
-      name: "Pompes_4",
-    },
-    {
-      id: 5,
-      name: "Pompes_5",
-    },
-  ];
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.category);
+  // const categories = [
+  //   {
+  //     id: 1,
+  //     name: "Pompes_1",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Pompes_2",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Pompes_3",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Pompes_4",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Pompes_5",
+  //   },
+  // ];
 
   const [catShow, setCatShow] = useState(false);
   const [category, setCategory] = useState("");
-  const [allCategory, setAllCategory] = useState(categories);
+  const [allCategory, setAllCategory] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [images, setImages] = useState([]);
   const [imageShow, setImageShow] = useState([]);
@@ -42,6 +46,16 @@ const AddProduct = () => {
     brand: "",
     stock: "",
   });
+
+  useEffect(() => {
+    dispatch(
+      getCategory({
+        searchValue: "",
+        perPage: "",
+        page: "",
+      })
+    );
+  }, []);
 
   const inputHandler = (e) => {
     setState({
@@ -101,6 +115,10 @@ const AddProduct = () => {
     setImageShow(selectKeepingImagesUrl);
   };
 
+  const addingProduct = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="px-2 lg:px-7 pt-5">
       <div className="w-full p-4 bg-[#e2e2e2] rounded-md">
@@ -114,7 +132,7 @@ const AddProduct = () => {
           </Link>
         </div>
         <div>
-          <form>
+          <form onSubmit={addingProduct}>
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text[#1e1e2c]">
               <div className="flex flex-col w-full gap-1">
                 <label htmlFor="name">Product Name</label>
