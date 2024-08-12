@@ -56,7 +56,7 @@ const Products = () => {
             </thead>
             <tbody>
               {[1, 2, 3, 4, 5].map((elt, i) => (
-                <tr>
+                <tr key={i}>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"

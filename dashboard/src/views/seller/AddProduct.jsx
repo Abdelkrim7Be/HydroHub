@@ -4,6 +4,7 @@ import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategory } from "../../store/Reducers/categoryReducer";
+import { addProduct } from "../../store/Reducers/productReducer";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
@@ -117,7 +118,29 @@ const AddProduct = () => {
 
   const addingProduct = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    // Adding all our field data into our formData area
+    formData.append("name", state.name);
+    formData.append("description", state.description);
+    formData.append("discount", state.discount);
+    formData.append("price", state.price);
+    formData.append("brand", state.brand);
+    formData.append("stock", state.stock);
+    formData.append("shopName", "HMM");
+    formData.append("category", category);
+    // formData.append("name", state.name);
+    for (let i = 0; i < images.length; i++) {
+      formData.append("images", images[i]);
+    }
+    // console.log(state);
+    dispatch(addProduct(formData));
   };
+
+  useEffect(() => {
+    setAllCategory(categories);
+  }, [categories]);
+
+  // console.log(allCategory);
 
   return (
     <div className="px-2 lg:px-7 pt-5">

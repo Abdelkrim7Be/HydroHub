@@ -2,13 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api/api";
 
 export const addProduct = createAsyncThunk(
-  "category/addingCategory",
-  async ({ name, image }, { rejectWithValue, fulfillWithValue }) => {
+  "product/addingProduct",
+  async (product, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("image", image);
-      const { data } = await api.post("/add-category", formData, {
+      const { data } = await api.post("/add-product", product, {
         withCredentials: true,
       });
       // console.log(data);
@@ -20,19 +17,19 @@ export const addProduct = createAsyncThunk(
   }
 );
 export const getProduct = createAsyncThunk(
-  "category/gettingCategory",
+  "product/gettingProduct",
   async (
     { perPage, page, searchValue },
     { rejectWithValue, fulfillWithValue }
   ) => {
     try {
       const { data } = await api.get(
-        `get-category?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `get-product?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
         {
           withCredentials: true,
         }
       );
-      console.log(data);
+      // console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       // console.log(error.response.data);
@@ -42,7 +39,7 @@ export const getProduct = createAsyncThunk(
 );
 
 const productReducer = createSlice({
-  name: "category",
+  name: "product",
   initialState: {
     successMessage: "",
     errorMessage: "",
@@ -68,7 +65,7 @@ const productReducer = createSlice({
       .addCase(addProduct.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
-        state.products = [...state.products, payload.category];
+        state.products = [...state.products, payload.product];
       })
       .addCase(getProduct.fulfilled, (state, { payload }) => {
         state.totalProducts = payload.totalProducts;
