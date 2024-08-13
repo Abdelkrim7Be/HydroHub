@@ -4,10 +4,16 @@ import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategory } from "../../store/Reducers/categoryReducer";
-import { addProduct } from "../../store/Reducers/productReducer";
+import LoadingSpinner from "./../../layout/loadingSpinner";
+import { addProduct, messageClear } from "../../store/Reducers/productReducer";
+import { overrideStyle } from "../../utilities/utilities";
+import { toast } from "react-hot-toast";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
+  const { loader, successMessage, errorMessage } = useSelector(
+    (state) => state.product
+  );
   const { categories } = useSelector((state) => state.category);
   // const categories = [
   //   {
@@ -94,6 +100,28 @@ const AddProduct = () => {
 
   // console.log(images);
   // console.log(imageShow);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+      setState({
+        name: "",
+        description: "",
+        discount: "",
+        price: "",
+        brand: "",
+        stock: "",
+      });
+      setImageShow([]);
+      setImages([]);
+      setCategory("");
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
 
   const changeImage = (img, index) => {
     if (img) {
@@ -324,8 +352,12 @@ const AddProduct = () => {
               />
             </div>
             <div className="flex">
-              <button className="bg-[#c28f6d]  hover:shadow-slate-300 hover:shadow-md text-white rounded-md px-7 py-2 my-3">
-                Add Product
+              <button
+                disabled={loader ? true : false}
+                type="submit"
+                className="bg-[#c28f6d] hover:shadow-slate-300 hover:shadow-md text-white rounded-md px-7 py-2 my-3"
+              >
+                {loader ? <LoadingSpinner /> : "Add Product"}
               </button>
             </div>
           </form>
