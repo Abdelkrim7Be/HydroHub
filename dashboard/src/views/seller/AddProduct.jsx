@@ -113,8 +113,7 @@ const AddProduct = () => {
         brand: "",
         stock: "",
       });
-      setImageShow([]);
-      setImages([]);
+
       setCategory("");
     }
     if (errorMessage) {

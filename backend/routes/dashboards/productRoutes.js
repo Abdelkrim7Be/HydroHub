@@ -9,5 +9,6 @@ router.get(
   authMiddleware,
   productController.getProduct
 );
+router.post("/update-product", authMiddleware, productController.updateProduct);
 
 module.exports = router;

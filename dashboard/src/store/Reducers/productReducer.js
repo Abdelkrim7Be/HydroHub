@@ -52,6 +52,21 @@ export const getProduct = createAsyncThunk(
     }
   }
 );
+export const update_product = createAsyncThunk(
+  "product/updatingProduct",
+  async (product, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(`/update-product`, product, {
+        withCredentials: true,
+      });
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      // console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const productReducer = createSlice({
   name: "product",
@@ -88,6 +103,17 @@ const productReducer = createSlice({
       })
       .addCase(getProduct.fulfilled, (state, { payload }) => {
         state.product = payload.product;
+      })
+      .addCase(update_product.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(update_product.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+      .addCase(update_product.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
       });
   },
 });

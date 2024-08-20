@@ -5,7 +5,14 @@ import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategory } from "../../store/Reducers/categoryReducer";
-import { getProduct } from "../../store/Reducers/productReducer";
+import {
+  getProduct,
+  update_product,
+  messageClear,
+} from "../../store/Reducers/productReducer";
+import LoadingSpinner from "./../../layout/loadingSpinner";
+import { overrideStyle } from "../../utilities/utilities";
+import { toast } from "react-hot-toast";
 
 const EditProduct = () => {
   const { productId } = useParams();
@@ -53,7 +60,7 @@ const EditProduct = () => {
 
   const [catShow, setCatShow] = useState(false);
   const [category, setCategory] = useState("");
-  const [allCategory, setAllCategory] = useState(categories);
+  const [allCategory, setAllCategory] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [images, setImages] = useState([]);
   const [imageShow, setImageShow] = useState([]);
@@ -138,6 +145,37 @@ const EditProduct = () => {
     setImageShow(product.images);
   }, [product]);
 
+  useEffect(() => {
+    if (categories.length > 0) {
+      setAllCategory(categories);
+    }
+  });
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
+
+  const updateProduct = (e) => {
+    e.preventDefault();
+    const obj = {
+      name: state.name,
+      description: state.description,
+      discount: state.discount,
+      price: state.price,
+      brand: state.brand,
+      stock: state.stock,
+      productId: productId,
+    };
+    dispatch(update_product(obj));
+  };
+
   return (
     <div className="px-2 lg:px-7 pt-5">
       <div className="w-full p-4 bg-[#e2e2e2] rounded-md">
@@ -151,7 +189,7 @@ const EditProduct = () => {
           </Link>
         </div>
         <div>
-          <form>
+          <form onSubmit={updateProduct}>
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text[#1e1e2c]">
               <div className="flex flex-col w-full gap-1">
                 <label htmlFor="name">Product Name</label>
@@ -206,22 +244,23 @@ const EditProduct = () => {
                     />
                     <div className="pt-5"></div>
                     <div className="flex justify-start items-start flex-col h-[200px] overflow-x-scrool">
-                      {allCategory.map((cat, i) => (
-                        <span
-                          className={`px-4 py-2 hover:bg-[#f29f6731]  hover:shadow-lg w-full cursor-pointer ${
-                            category === cat.name && "bg-[#f29f6731]"
-                          }`}
-                          onClick={() => {
-                            setCatShow(false);
-                            setCategory(cat.name);
-                            setSearchValue("");
-                            setAllCategory(categories);
-                          }}
-                          key={cat.id}
-                        >
-                          {cat.name}
-                        </span>
-                      ))}
+                      {allCategory.length > 0 &&
+                        allCategory.map((cat, i) => (
+                          <span
+                            className={`px-4 py-2 hover:bg-[#f29f6731]  hover:shadow-lg w-full cursor-pointer ${
+                              category === cat.name && "bg-[#f29f6731]"
+                            }`}
+                            onClick={() => {
+                              setCatShow(false);
+                              setCategory(cat.name);
+                              setSearchValue("");
+                              setAllCategory(categories);
+                            }}
+                            key={cat.id}
+                          >
+                            {cat.name}
+                          </span>
+                        ))}
                     </div>
                   </div>
                 </div>
@@ -279,29 +318,31 @@ const EditProduct = () => {
               ></textarea>
             </div>
             <div className="grid lg:grid-col-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-[#1e1e2c] mb-4">
-              {imageShow.map((img, i) => (
-                <div className="h-[180px] relative" key={i}>
-                  <label htmlFor={i}>
-                    <img
-                      className="w-full h-full rounded-sm"
-                      src={img}
-                      alt=""
+              {imageShow &&
+                imageShow.length > 0 &&
+                imageShow.map((img, i) => (
+                  <div className="h-[180px] relative" key={i}>
+                    <label htmlFor={i}>
+                      <img
+                        className="w-full h-full rounded-sm"
+                        src={img}
+                        alt=""
+                      />
+                    </label>
+                    <input
+                      onChange={(e) => changeImage(e.target.files[i], i)}
+                      type="file"
+                      id={i}
+                      className="hidden"
                     />
-                  </label>
-                  <input
-                    onChange={(e) => changeImage(e.target.files[i], i)}
-                    type="file"
-                    id={i}
-                    className="hidden"
-                  />
-                  <span
-                    onClick={() => removeImage(i)}
-                    className="p-2 z-10 cursor-pointer bg-[#f29f67] hover:shadow-lg hover:shadow-slate-400/50 text-white absolute top-1 right-1 rounded-full"
-                  >
-                    <IoMdCloseCircle />
-                  </span>
-                </div>
-              ))}
+                    <span
+                      onClick={() => removeImage(i)}
+                      className="p-2 z-10 cursor-pointer bg-[#f29f67] hover:shadow-lg hover:shadow-slate-400/50 text-white absolute top-1 right-1 rounded-full"
+                    >
+                      <IoMdCloseCircle />
+                    </span>
+                  </div>
+                ))}
               <label
                 className="flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed border-[#f29f67] hover:border-[#7b7b7b] w-full text-[#1e1e2c]"
                 htmlFor="image"
@@ -320,8 +361,12 @@ const EditProduct = () => {
               />
             </div>
             <div className="flex">
-              <button className="bg-[#c28f6d]  hover:shadow-slate-300 hover:shadow-md text-white rounded-md px-7 py-2 my-3">
-                Save Changes
+              <button
+                disabled={loader ? true : false}
+                type="submit"
+                className="bg-[#c28f6d] hover:shadow-slate-300 hover:shadow-md text-white rounded-md px-7 py-2 my-3"
+              >
+                {loader ? <LoadingSpinner /> : "Save changes"}
               </button>
             </div>
           </form>
