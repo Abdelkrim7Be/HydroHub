@@ -1,14 +1,34 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import Search from "./../components/Search";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../../store/Reducers/productReducer";
 
 const Products = () => {
+  const dispatch = useDispatch();
+  const {
+    products,
+    totalProducts,
+    loader,
+    successMessage,
+    errorMessage,
+    categories,
+  } = useSelector((state) => state.product);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [perPage, setPerPage] = useState(5);
+
+  useEffect(() => {
+    const obj = {
+      perPage: parseInt(perPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getProducts(obj));
+  }, [searchValue, currentPage, perPage]);
+
   return (
     <div className="px-2 lg:px-7 pt-5">
       <h1 className="text-[#1e1e2c] font-semibold text-lg mb-3">
@@ -55,13 +75,13 @@ const Products = () => {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((elt, i) => (
+              {products.map((elt, i) => (
                 <tr key={i}>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    {elt}
+                    {i + 1}
                   </td>
                   <td
                     scope="row"
@@ -69,7 +89,7 @@ const Products = () => {
                   >
                     <img
                       className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/category/${elt}.jpg`}
+                      src={elt.images[0]}
                       alt=""
                     />
                   </td>
@@ -77,31 +97,35 @@ const Products = () => {
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    Bouchon à emboit
+                    {elt?.name?.slice(0, 15)}...
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    Bouchon
+                    {elt.category}
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    HMM
+                    {elt.brand}
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    $521
+                    ${elt.price}
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    15%
+                    {elt.discount === 0 ? (
+                      <span>No Discount</span>
+                    ) : (
+                      <span>{elt.discount}%</span>
+                    )}
                   </td>
                   <td
                     scope="row"
@@ -133,15 +157,19 @@ const Products = () => {
             </tbody>
           </table>
         </div>
-        <div className="w-full flex justify-end mt-4 bottom-4 right-4">
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItems={50}
-            perPage={perPage}
-            showItem={3}
-          />
-        </div>
+        {totalProducts <= perPage ? (
+          ""
+        ) : (
+          <div className="w-full flex justify-end mt-4 bottom-4 right-4">
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItems={50}
+              perPage={perPage}
+              showItem={3}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

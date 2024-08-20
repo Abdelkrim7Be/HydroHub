@@ -16,20 +16,20 @@ export const addProduct = createAsyncThunk(
     }
   }
 );
-export const getProduct = createAsyncThunk(
-  "product/gettingProduct",
+export const getProducts = createAsyncThunk(
+  "product/gettingProducts",
   async (
     { perPage, page, searchValue },
     { rejectWithValue, fulfillWithValue }
   ) => {
     try {
       const { data } = await api.get(
-        `get-product?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `get-products?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
         {
           withCredentials: true,
         }
       );
-      // console.log(data);
+      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       // console.log(error.response.data);
@@ -65,9 +65,8 @@ const productReducer = createSlice({
       .addCase(addProduct.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
-        state.products = [...state.products, payload.product];
       })
-      .addCase(getProduct.fulfilled, (state, { payload }) => {
+      .addCase(getProducts.fulfilled, (state, { payload }) => {
         state.totalProducts = payload.totalProducts;
         state.products = payload.products;
       });
