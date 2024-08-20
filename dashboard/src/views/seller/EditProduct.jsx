@@ -1,32 +1,55 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategory } from "../../store/Reducers/categoryReducer";
+import { getProduct } from "../../store/Reducers/productReducer";
 
 const EditProduct = () => {
-  const categories = [
-    {
-      id: 1,
-      name: "Pompes_1",
-    },
-    {
-      id: 2,
-      name: "Pompes_2",
-    },
-    {
-      id: 3,
-      name: "Pompes_3",
-    },
-    {
-      id: 4,
-      name: "Pompes_4",
-    },
-    {
-      id: 5,
-      name: "Pompes_5",
-    },
-  ];
+  const { productId } = useParams();
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.category);
+  const { product } = useSelector((state) => state.product);
+  const { loader, successMessage, errorMessage } = useSelector(
+    (state) => state.product
+  );
+  // const categories = [
+  //   {
+  //     id: 1,
+  //     name: "Pompes_1",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Pompes_2",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Pompes_3",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Pompes_4",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Pompes_5",
+  //   },
+  // ];
+
+  useEffect(() => {
+    dispatch(
+      getCategory({
+        searchValue: "",
+        perPage: "",
+        page: "",
+      })
+    );
+  }, []);
+  useEffect(() => {
+    dispatch(getProduct(productId));
+  }, [productId]);
 
   const [catShow, setCatShow] = useState(false);
   const [category, setCategory] = useState("");
@@ -104,20 +127,16 @@ const EditProduct = () => {
 
   useEffect(() => {
     setState({
-      name: "Adaptateur XY",
-      description: "lorem74 oihusdc apid ôijâoi à jze ^jz^ddjzàaoj oze",
-      discount: 10,
-      price: 255,
-      brand: "HMM",
-      stock: 10,
+      name: product.name,
+      description: product.description,
+      discount: product.discount,
+      price: product.price,
+      brand: product.brand,
+      stock: product.stock,
     });
-    setCategory("Pompes_1");
-    setImageShow([
-      "http://localhost:3000/images/category/1.jpg",
-      "http://localhost:3000/images/category/2.jpg",
-      "http://localhost:3000/images/category/3.jpg",
-    ]);
-  }, []);
+    setCategory(product.category);
+    setImageShow(product.images);
+  }, [product]);
 
   return (
     <div className="px-2 lg:px-7 pt-5">

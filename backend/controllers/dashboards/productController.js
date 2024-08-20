@@ -108,6 +108,16 @@ class productController {
       console.log(error.message);
     }
   };
+
+  getProduct = async (req, res) => {
+    const { productId } = req.params;
+    try {
+      const product = await productModel.findById(productId);
+      responseReturn(res, 200, { product });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 
 module.exports = new productController();
