@@ -9,6 +9,7 @@ import {
   getProduct,
   update_product,
   messageClear,
+  updateProductImage,
 } from "../../store/Reducers/productReducer";
 import LoadingSpinner from "./../../layout/loadingSpinner";
 import { overrideStyle } from "../../utilities/utilities";
@@ -111,14 +112,60 @@ const EditProduct = () => {
   // console.log(images);
   // console.log(imageShow);
 
-  const changeImage = (img, index) => {
-    if (img) {
-      let tempUrl = imageShow;
-      let tempImages = images;
-      tempImages[index] = img;
-      tempUrl[index] = { url: URL.createObjectURL(img) };
-      setImageShow([...tempUrl]);
-      setImages([...tempImages]);
+  // const changeImage = (img, index) => {
+  //   if (img) {
+  //     // Create copies of the arrays
+  //     let tempUrl = [...imageShow];
+  //     let tempImages = [...images];
+
+  //     // Modify the copied arrays
+  //     tempImages[index] = img;
+  //     tempUrl[index] = { url: URL.createObjectURL(img) };
+
+  //     // Update the state with the modified copies
+  //     setImageShow(tempUrl);
+  //     setImages(tempImages);
+  //   }
+  // };
+
+  // const changeImage = (img, files) => {
+  //   if (files.length > 0) {
+  //     dispatch(
+  //       updateProductImage({ oldImage: img, newImage: files[0], productId })
+  //     );
+  //   }
+  // };
+
+  // const changeImage = (img, index, files) => {
+  //   if (files.length > 0) {
+  //     // Create copies of the arrays
+  //     let tempUrl = [...imageShow];
+  //     let tempImages = [...images];
+
+  //     // Modify the copied arrays
+  //     tempImages[index] = files[0]; // Update the specific image with the new file
+  //     tempUrl[index] = { url: URL.createObjectURL(files[0]) }; // Create a new URL for the image
+
+  //     // Update the state with the modified copies
+  //     setImageShow(tempUrl);
+  //     setImages(tempImages);
+
+  //     // Dispatch the action to update the product image on the backend
+  //     dispatch(
+  //       updateProductImage({ oldImage: img, newImage: files[0], productId })
+  //     );
+  //   }
+  //   console.log(files);
+  // };
+  const changeImage = (img, files) => {
+    if (files.length > 0) {
+      dispatch(
+        updateProductImage({
+          oldImage: img,
+          newImage: files[0],
+          productId,
+        })
+      );
     }
   };
 
@@ -149,7 +196,7 @@ const EditProduct = () => {
     if (categories.length > 0) {
       setAllCategory(categories);
     }
-  });
+  }, [categories]);
 
   useEffect(() => {
     if (successMessage) {
@@ -330,7 +377,7 @@ const EditProduct = () => {
                       />
                     </label>
                     <input
-                      onChange={(e) => changeImage(e.target.files[i], i)}
+                      onChange={(e) => changeImage(img, e.target.files)}
                       type="file"
                       id={i}
                       className="hidden"

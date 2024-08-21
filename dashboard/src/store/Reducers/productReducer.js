@@ -52,6 +52,7 @@ export const getProduct = createAsyncThunk(
     }
   }
 );
+
 export const update_product = createAsyncThunk(
   "product/updatingProduct",
   async (product, { rejectWithValue, fulfillWithValue }) => {
@@ -63,6 +64,30 @@ export const update_product = createAsyncThunk(
       return fulfillWithValue(data);
     } catch (error) {
       // console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateProductImage = createAsyncThunk(
+  "product/updateProductImage",
+  async (
+    { oldImage, newImage, productId },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const formData = new FormData();
+      formData.append("oldImage", oldImage);
+      formData.append("newImage", newImage);
+      formData.append("productId", productId);
+
+      const { data } = await api.post(`/update-product-image`, formData, {
+        withCredentials: true,
+      });
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -113,6 +138,10 @@ const productReducer = createSlice({
       })
       .addCase(update_product.fulfilled, (state, { payload }) => {
         state.loader = false;
+        state.successMessage = payload.message;
+      })
+      .addCase(updateProductImage.fulfilled, (state, { payload }) => {
+        state.product = payload.product;
         state.successMessage = payload.message;
       });
   },
