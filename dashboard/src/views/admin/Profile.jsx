@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaUser,
   FaEnvelope,
@@ -6,8 +6,19 @@ import {
   FaUpload,
   FaRegEdit,
 } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  profileImageUpload,
+  messageClear,
+} from "./../../store/Reducers/authReducer"; // Adjust the path as needed
+import LoadingSpinner from "./../../layout/loadingSpinner"; // Adjust the path as needed
+import toast from "react-hot-toast";
 
 const Profile = () => {
+  const dispatch = useDispatch();
+  const { userInfo, successMessage, loader } = useSelector(
+    (state) => state.auth
+  );
   const [profileData, setProfileData] = useState({
     name: "",
     email: "",
@@ -40,13 +51,23 @@ const Profile = () => {
   };
 
   const handleUpload = (e) => {
-    e.preventDefault();
-    alert("Profile picture uploaded successfully!");
+    if (e.target.files.length > 0) {
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      dispatch(profileImageUpload(formData));
+    }
   };
 
   const toggleEdit = () => {
     setIsEdit(!isEdit);
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage]);
 
   return (
     <div className="container px-2 lg:px-7 pt-5">
@@ -59,18 +80,31 @@ const Profile = () => {
             <div className="flex items-center">
               <div className="w-24 h-24 rounded-full overflow-hidden bg-white">
                 <img
-                  src="http://localhost:3000/images/admin.jpg"
+                  src={
+                    userInfo.image
+                      ? userInfo.image
+                      : "http://localhost:3000/images/admin.jpg"
+                  }
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="ml-4">
-                <button
-                  onClick={handleUpload}
-                  className="bg-[#f29f6731] text-[#1e1e2c] font-semibold py-2 px-4 rounded-full flex items-center"
-                >
-                  <FaUpload className="mr-2" /> Upload
-                </button>
+                <form>
+                  <label className="bg-[#f29f6731] text-[#1e1e2c] font-semibold py-2 px-4 rounded-full flex items-center cursor-pointer">
+                    {loader ? (
+                      <LoadingSpinner className="mr-2 text-[#ffffff]" />
+                    ) : (
+                      <FaUpload className="mr-2" />
+                    )}
+                    {loader ? "" : "Upload"}
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={handleUpload}
+                    />
+                  </label>
+                </form>
               </div>
             </div>
             <span
@@ -85,15 +119,16 @@ const Profile = () => {
             <div className="flex flex-col gap-2 p-7 m-2 relative bg-[#f29f6731] rounded-md">
               <div className="flex gap-2">
                 <span className="text-medium font-semibold">Name: </span>
-                <span>Admin Name</span>
+                <span>{userInfo.name}</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-medium font-semibold">Email: </span>
-                <span>admin@example.com</span>
+                <span>{userInfo.email}</span>
               </div>
+
               <div className="flex gap-2">
                 <span className="text-medium font-semibold">Role: </span>
-                <span>Administrator</span>
+                <span>{userInfo.role}</span>
               </div>
             </div>
           </div>

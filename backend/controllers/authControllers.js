@@ -117,26 +117,48 @@ class authControllers {
     }
   };
   uploadingProfileImage = async (req, res) => {
-    const { id } = req;
+    const { id, role } = req;
     const form = formidable({ multiple: true });
+
     form.parse(req, async (err, _, files) => {
+      if (err) {
+        return responseReturn(res, 400, {
+          error: "Error parsing the form data",
+        });
+      }
+
       cloudinary.config({
         cloud_name: process.env.cloud_name,
         api_key: process.env.api_key,
         api_secret: process.env.api_secret,
         secure: true,
       });
+
       const { image } = files;
 
       try {
         const result = await cloudinary.uploader.upload(image.filepath, {
           folder: "profile",
         });
+
         if (result) {
-          await sellerModel.findByIdAndUpdate(id, {
-            image: result.url,
-          });
-          const userInfo = await sellerModel.findById(id);
+          let userInfo;
+          if (role === "admin") {
+            await adminModel.findByIdAndUpdate(id, {
+              image: result.url,
+            });
+            userInfo = await adminModel.findById(id);
+          } else if (role === "seller") {
+            await sellerModel.findByIdAndUpdate(id, {
+              image: result.url,
+            });
+            userInfo = await sellerModel.findById(id);
+          } else {
+            return responseReturn(res, 400, {
+              error: "Invalid role specified",
+            });
+          }
+
           responseReturn(res, 201, {
             message: "Profile Image Uploaded successfully",
             userInfo,
