@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaUser,
   FaEnvelope,
@@ -8,10 +8,18 @@ import {
   FaSpinner,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  profileImageUpload,
+  messageClear,
+} from "./../../store/Reducers/authReducer";
+import LoadingSpinner from "./../../layout/loadingSpinner";
+import toast from "react-hot-toast";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo, successMessage, loader } = useSelector(
+    (state) => state.auth
+  );
   const [profileData, setProfileData] = useState({
     shopName: "",
     divisionName: "",
@@ -25,6 +33,7 @@ const Profile = () => {
     confirmPassword: "",
   });
   const [isUploading, setIsUploading] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const status = "active";
 
@@ -47,18 +56,23 @@ const Profile = () => {
   };
 
   const handleUpload = (e) => {
-    e.preventDefault();
-    setIsUploading(true);
-    setTimeout(() => {
-      setIsUploading(false);
-      alert("Profile picture uploaded successfully!");
-    }, 2000);
+    if (e.target.files.length > 0) {
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      dispatch(profileImageUpload(formData));
+    }
   };
 
   const toggleEdit = () => {
     setIsEdit(!isEdit);
   };
 
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, dispatch]);
   return (
     <div className="container px-2 lg:px-7 pt-5">
       <h2 className="text-xl py-2 font-bold">Profile</h2>
@@ -70,15 +84,24 @@ const Profile = () => {
             <div className="flex items-center">
               <div className="w-24 h-24 rounded-full overflow-hidden bg-white">
                 <img
-                  src="http://localhost:3000/images/admin.jpg"
+                  src={
+                    userInfo.image
+                      ? userInfo.image
+                      : "http://localhost:3000/images/seller.png"
+                  }
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="ml-4">
-                <form onSubmit={handleUpload}>
+                <form>
                   <label className="bg-[#f29f6731] text-[#1e1e2c] font-semibold py-2 px-4 rounded-full flex items-center cursor-pointer">
-                    <FaUpload className="mr-2" /> Upload
+                    {loader ? (
+                      <LoadingSpinner className="mr-2 text-[#ffffff]" />
+                    ) : (
+                      <FaUpload className="mr-2" />
+                    )}
+                    {loader ? "" : "Upload"}
                     <input
                       type="file"
                       className="hidden"
@@ -86,11 +109,6 @@ const Profile = () => {
                     />
                   </label>
                 </form>
-                {isUploading && (
-                  <div className="ml-4">
-                    <FaSpinner className="animate-spin text-[#1e1e2c]" />
-                  </div>
-                )}
               </div>
             </div>
             <span
@@ -136,7 +154,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          {userInfo?.shopInfo ? (
+          {!userInfo?.shopInfo ? (
             <>
               <div className="bg-[#e2e2e2] shadow-md rounded-lg p-4 mb-6 flex-1">
                 <h3 className="text-xl font-semibold mb-4">Update Profile</h3>
