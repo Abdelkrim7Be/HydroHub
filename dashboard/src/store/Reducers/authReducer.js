@@ -86,6 +86,21 @@ export const profileImageUpload = createAsyncThunk(
   }
 );
 
+export const addProfileInfo = createAsyncThunk(
+  "auth/addingProfileInfo",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/add-profile-info", info, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      // console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getRole = (token) => {
   if (token) {
     const decodeToken = jwtDecode(token);
@@ -166,6 +181,14 @@ const authReducer = createSlice({
         state.loader = true;
       })
       .addCase(profileImageUpload.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = payload.userInfo; //because we passed the message when login Success from the controller
+        state.successMessage = payload.message;
+      })
+      .addCase(addProfileInfo.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(addProfileInfo.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.userInfo = payload.userInfo; //because we passed the message when login Success from the controller
         state.successMessage = payload.message;

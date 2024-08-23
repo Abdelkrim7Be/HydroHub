@@ -11,5 +11,10 @@ router.post(
   authMiddleware,
   authControllers.uploadingProfileImage
 );
+router.post(
+  "/add-profile-info",
+  authMiddleware,
+  authControllers.addingProfileInfo
+);
 
 module.exports = router;

@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { FaArrowDownWideShort } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -7,35 +6,36 @@ import Pagination from "../Pagination";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { getSellerRequest } from "../../store/Reducers/sellerReducer";
+import Search from "./../components/Search";
 
 const SellerRequest = () => {
+  const dispatch = useDispatch();
+  const { sellers, totalSellers } = useSelector((state) => state.seller);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [perPage, setPerPage] = useState(5);
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    dispatch(
+      getSellerRequest({
+        perPage,
+        searchValue,
+        page: currentPage,
+      })
+    );
+  }, [perPage, searchValue, currentPage]);
   return (
     <div className="px-2 lg:px-7 pt-5">
       <h1 className="text-[20px] font-bold mb-3">Seller Request</h1>
       <div className="w-full p-4 bg-[#e2e2e2] rounded-md">
-        <div className="flex justify-between items-center">
-          <select
-            onChange={(e) => setPerPage(parseInt(e.target.value))}
-            className="px-4 py-2  outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden"
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-          </select>
-          <div className="hidden md:block relative">
-            <input
-              type="text"
-              className="px-3 py-2 outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden pl-10 placeholder-black"
-              name="search"
-              placeholder="Search"
-            />
-            <IoSearchSharp className="absolute top-1/2 left-3 transform -translate-y-1/2 text-[#1e1e2c]" />
-          </div>
-        </div>
+        <Search
+          setPerPage={setPerPage}
+          setSearchValue={setSearchValue}
+          searchValue={searchValue}
+        />
         <div className="mt-5 relative overflow-x-auto">
           <table className="w-full text-left text-[#1e1e2c] font-medium text-sm bg-[#e2e2e2] rounded-lg">
             <thead className="text-sm uppercase border-b border-[#7f7f7f] ">
@@ -61,37 +61,37 @@ const SellerRequest = () => {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((elt, i) => (
-                <tr className="border-b border-[#7f7f7f]">
+              {sellers.map((elt, i) => (
+                <tr className="border-b border-[#7f7f7f]" key={i}>
                   <td
                     scope="row"
                     className="py-2 px-4 font-medium whitespace-nowrap"
                   >
-                    {elt}
+                    {i + 1}
                   </td>
                   <td
                     scope="row"
                     className="py-2 px-4 font-medium whitespace-nowrap"
                   >
-                    Soufiane Omari
+                    {elt.name}
                   </td>
                   <td
                     scope="row"
                     className="py-2 px-4 font-medium whitespace-nowrap"
                   >
-                    soufianeomari@gmail.com
+                    {elt.email}
                   </td>
                   <td
                     scope="row"
                     className="py-2 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Inactive</span>
+                    <span>{elt.payment}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-2 px-4 font-medium whitespace-nowrap"
                   >
-                    Pending
+                    {elt.status}
                   </td>
                   <td
                     scope="row"
@@ -99,7 +99,7 @@ const SellerRequest = () => {
                   >
                     <div className="flex justify-start items-start gap-4">
                       <Link
-                        to={`/admin/dashboard/seller/details/2`}
+                        to={`/admin/dashboard/seller/details/${elt._id}`}
                         className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300"
                       >
                         <FaEye />

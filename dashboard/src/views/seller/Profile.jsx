@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   profileImageUpload,
+  addProfileInfo,
   messageClear,
 } from "./../../store/Reducers/authReducer";
 import LoadingSpinner from "./../../layout/loadingSpinner";
@@ -24,7 +25,7 @@ const Profile = () => {
     shopName: "",
     divisionName: "",
     districtName: "",
-    subDistrictName: "",
+    region: "",
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -47,7 +48,7 @@ const Profile = () => {
 
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    alert(JSON.stringify(profileData, null, 2));
+    dispatch(addProfileInfo(profileData));
   };
 
   const handlePasswordSubmit = (e) => {
@@ -73,6 +74,7 @@ const Profile = () => {
       dispatch(messageClear());
     }
   }, [successMessage, dispatch]);
+
   return (
     <div className="container px-2 lg:px-7 pt-5">
       <h2 className="text-xl py-2 font-bold">Profile</h2>
@@ -221,29 +223,30 @@ const Profile = () => {
                   </div>
                   <div className="mb-4">
                     <label
-                      htmlFor="subDistrictName"
+                      htmlFor="region"
                       className="block text-[#1e1e2c] mb-1"
                     >
-                      Sub-District Name
+                      Region Name
                     </label>
                     <div className="bg-white flex items-center border border-gray-50 rounded-lg p-2">
                       <FaUser className="text-[#1e1e2c] mr-2" />
                       <input
-                        id="subDistrictName"
-                        name="subDistrictName"
+                        id="region"
+                        name="region"
                         type="text"
                         className="w-full outline-none"
-                        placeholder="Sub-District Name"
+                        placeholder="Region Name"
                         onChange={handleProfileChange}
-                        value={profileData.subDistrictName}
+                        value={profileData.region}
                       />
                     </div>
                   </div>
                   <button
+                    disabled={loader ? true : false}
                     type="submit"
                     className="bg-[#f29f6731] text-[#1e1e2c] font-semibold py-2 px-4 rounded-full"
                   >
-                    Save Changes
+                    {loader ? <LoadingSpinner /> : "Save Changes"}
                   </button>
                 </form>
               </div>
@@ -253,19 +256,19 @@ const Profile = () => {
               <div className="flex flex-col gap-2 p-7 m-2 relative bg-[#f29f6731] rounded-md">
                 <div className="flex gap-2">
                   <span className="text-medium font-semibold">Shop Name: </span>
-                  <span>HMM</span>
+                  <span>{userInfo.shopInfo?.shopName}</span>
                 </div>
                 <div className="flex gap-2">
                   <span className="text-medium font-semibold">Division: </span>
-                  <span>Meknes</span>
+                  <span>{userInfo.shopInfo?.divisionName}</span>
                 </div>
                 <div className="flex gap-2">
                   <span className="text-medium font-semibold">District: </span>
-                  <span>Hamria</span>
+                  <span>{userInfo.shopInfo?.districtName}</span>
                 </div>
                 <div className="flex gap-2">
                   <span className="text-medium font-semibold">Region: </span>
-                  <span>Fez-Meknes</span>
+                  <span>{userInfo.shopInfo?.region}</span>
                 </div>
               </div>
             </div>
