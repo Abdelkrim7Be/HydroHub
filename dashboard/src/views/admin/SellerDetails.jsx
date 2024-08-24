@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getSeller } from "../../store/Reducers/sellerReducer";
 
 const SellerDetails = () => {
+  const dispatch = useDispatch();
+  const { seller } = useSelector((state) => state.seller);
+  const { sellerId } = useParams();
+
+  useEffect(() => {
+    dispatch(getSeller(sellerId));
+  }, [sellerId]);
+
   return (
     <div className="px-2 lg:px-7 pt-5">
       <h1 className="text-[20px] font-bold mb-3">Seller Details</h1>
@@ -10,7 +21,7 @@ const SellerDetails = () => {
             <div>
               <img
                 className="w-full h-[230px] rounded-full"
-                src="http://localhost:3000/images/seller.png"
+                src={seller?.image || "http://localhost:3000/images/seller.png"}
                 alt=""
               />
             </div>
@@ -24,23 +35,23 @@ const SellerDetails = () => {
               <div className="flex justify-between text-sm flex-col gap-2 p-4 bg-[#f29f6731] rounded-lg">
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>Name: </span>
-                  <span>Soufiane Omari</span>
+                  <span>{seller?.name}</span>
                 </div>
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>Email: </span>
-                  <span>Soufianeomari@gmail.com</span>
+                  <span>{seller?.email}</span>
                 </div>
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>Role: </span>
-                  <span>Seller</span>
+                  <span>{seller?.role}</span>
                 </div>
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>Status: </span>
-                  <span>Active</span>
+                  <span>{seller?.status}</span>
                 </div>
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>Payment Status: </span>
-                  <span>Active</span>
+                  <span>{seller?.payment}</span>
                 </div>
               </div>
             </div>
@@ -54,19 +65,19 @@ const SellerDetails = () => {
               <div className="flex justify-between text-sm flex-col gap-2 p-4 bg-[#f29f6731] rounded-lg">
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>Shop Name: </span>
-                  <span>HMM</span>
+                  <span>{seller?.shopInfo?.shopName}</span>
                 </div>
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>Division: </span>
-                  <span>Meknes</span>
+                  <span>{seller?.shopInfo?.divisionName}</span>
                 </div>
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>District: </span>
-                  <span>Hamria</span>
+                  <span>{seller?.shopInfo?.districtName}</span>
                 </div>
                 <div className="flex gap-2 text-[#1e1e2c] font-bold">
                   <span>Region: </span>
-                  <span>Fez-meknes</span>
+                  <span>{seller?.shopInfo?.region}</span>
                 </div>
               </div>
             </div>
