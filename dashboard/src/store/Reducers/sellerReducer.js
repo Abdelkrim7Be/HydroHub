@@ -38,6 +38,22 @@ export const getSeller = createAsyncThunk(
   }
 );
 
+export const updateSellerStatus = createAsyncThunk(
+  "category/updatingSellerStatus",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(`/update-seller-status`, info, {
+        withCredentials: true,
+      });
+      //   console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      // console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const sellerReducer = createSlice({
   name: "category",
   initialState: {
@@ -62,6 +78,10 @@ const sellerReducer = createSlice({
       })
       .addCase(getSeller.fulfilled, (state, { payload }) => {
         state.seller = payload.seller;
+      })
+      .addCase(updateSellerStatus.fulfilled, (state, { payload }) => {
+        state.seller = payload.seller;
+        state.successMessage = payload.message;
       });
   },
 });

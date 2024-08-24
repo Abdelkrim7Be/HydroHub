@@ -12,5 +12,10 @@ router.get(
   authMiddleware,
   sellerController.gettingSeller
 );
+router.post(
+  "/update-seller-status",
+  authMiddleware,
+  sellerController.updateSellerStatus
+);
 
 module.exports = router;

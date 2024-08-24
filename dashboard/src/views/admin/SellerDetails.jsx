@@ -1,16 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getSeller } from "../../store/Reducers/sellerReducer";
+import {
+  getSeller,
+  updateSellerStatus,
+  messageClear,
+} from "../../store/Reducers/sellerReducer";
+import { toast } from "react-hot-toast";
 
 const SellerDetails = () => {
   const dispatch = useDispatch();
-  const { seller } = useSelector((state) => state.seller);
+  const { seller, successMessage } = useSelector((state) => state.seller);
   const { sellerId } = useParams();
 
   useEffect(() => {
     dispatch(getSeller(sellerId));
   }, [sellerId]);
+
+  const [status, setStatus] = useState("");
+  const submitStatus = (e) => {
+    e.preventDefault();
+    dispatch(
+      updateSellerStatus({
+        sellerId,
+        status,
+      })
+    );
+  };
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage]);
+  useEffect(() => {
+    if (seller) {
+      setStatus(seller.status);
+    }
+  }, [seller]);
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -84,12 +111,17 @@ const SellerDetails = () => {
           </div>
         </div>
         <div className="">
-          <form>
+          <form onSubmit={submitStatus}>
             <div className="flex gap-4 py-3">
-              <select className="px-4 py-2  outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden">
+              <select
+                className="px-4 py-2  outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden"
+                required
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
                 <option value="">--Select Status--</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
               </select>
               <button className="bg-[#c28f6d] w-[170px] hover:shadow-slate-300 hover:shadow-md text-white rounded-md px-7 py-2">
                 Submit
