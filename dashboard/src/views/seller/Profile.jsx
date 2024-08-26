@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   profileImageUpload,
   addProfileInfo,
+  changePassword,
   messageClear,
 } from "./../../store/Reducers/authReducer";
 import LoadingSpinner from "./../../layout/loadingSpinner";
@@ -51,17 +52,32 @@ const Profile = () => {
     dispatch(addProfileInfo(profileData));
   };
 
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault();
-    alert(JSON.stringify(passwordData, null, 2));
-  };
-
   const handleUpload = (e) => {
     if (e.target.files.length > 0) {
       const formData = new FormData();
       formData.append("image", e.target.files[0]);
       dispatch(profileImageUpload(formData));
     }
+  };
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast.error("New passwords do not match!");
+      return;
+    }
+    dispatch(changePassword(passwordData))
+      .unwrap()
+      .then(() => {
+        toast.success("Password changed successfully!");
+        setPasswordData({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+      })
+      .catch(() => {
+        toast.error("Failed to change password.");
+      });
   };
 
   const toggleEdit = () => {

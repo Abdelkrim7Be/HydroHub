@@ -13,7 +13,7 @@ const sellerSchema = new Schema(
     password: {
       type: String,
       required: true,
-      select: false,
+      select: true,
     },
     role: {
       type: String,

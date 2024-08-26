@@ -9,6 +9,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   profileImageUpload,
+  addProfileInfo,
+  changePassword,
   messageClear,
 } from "./../../store/Reducers/authReducer"; // Adjust the path as needed
 import LoadingSpinner from "./../../layout/loadingSpinner"; // Adjust the path as needed
@@ -20,8 +22,8 @@ const Profile = () => {
     (state) => state.auth
   );
   const [profileData, setProfileData] = useState({
-    name: "",
-    email: "",
+    name: userInfo.name || "",
+    email: userInfo.email || "",
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -42,12 +44,14 @@ const Profile = () => {
 
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    alert(JSON.stringify(profileData, null, 2));
-  };
-
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault();
-    alert(JSON.stringify(passwordData, null, 2));
+    dispatch(addProfileInfo(profileData))
+      .unwrap()
+      .then(() => {
+        toast.success("Profile updated successfully!");
+      })
+      .catch(() => {
+        toast.error("Failed to update profile.");
+      });
   };
 
   const handleUpload = (e) => {
@@ -67,8 +71,28 @@ const Profile = () => {
       toast.success(successMessage);
       dispatch(messageClear());
     }
-  }, [successMessage]);
+  }, [successMessage, dispatch]);
 
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast.error("New passwords do not match!");
+      return;
+    }
+    dispatch(changePassword(passwordData))
+      .unwrap()
+      .then(() => {
+        toast.success("Password changed successfully!");
+        setPasswordData({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+      })
+      .catch(() => {
+        toast.error("Failed to change password.");
+      });
+  };
   return (
     <div className="container px-2 lg:px-7 pt-5">
       <h2 className="text-xl py-2 font-bold">Profile</h2>

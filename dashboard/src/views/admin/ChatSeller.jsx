@@ -88,7 +88,7 @@ const ChatSeller = () => {
 
   useEffect(() => {
     if (currentSeller) {
-      console.log("Current Seller Data:", currentSeller); // Log to see the state in the component
+      // console.log("Current Seller Data:", currentSeller); // Log to see the state in the component
     }
   }, [currentSeller]);
 

@@ -101,6 +101,20 @@ export const addProfileInfo = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (passwords, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/change-password", passwords, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getRole = (token) => {
   if (token) {
     const decodeToken = jwtDecode(token);

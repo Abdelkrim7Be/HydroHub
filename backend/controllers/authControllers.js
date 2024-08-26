@@ -193,6 +193,43 @@ class authControllers {
       responseReturn(res, 500, { error: error.message });
     }
   };
+  changePassword = async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    const { id, role } = req;
+
+    try {
+      let userModel;
+      if (role === "admin") {
+        userModel = adminModel;
+      } else if (role === "seller") {
+        userModel = sellerModel;
+      } else {
+        responseReturn(res, 403, { message: "Unauthorized access" });
+      }
+
+      const user = await userModel.findById(id);
+      // console.log(user);
+      if (!user) {
+        responseReturn(res, 404, { message: "User not found" });
+      }
+
+      const match = await bcrypt.compare(currentPassword, user.password);
+      if (!match) {
+        responseReturn(res, 400, {
+          message: "Current password is incorrect",
+        });
+      }
+
+      user.password = await bcrypt.hash(newPassword, 12);
+      await user.save();
+
+      responseReturn(res, 200, {
+        message: "Password changed successfully",
+      });
+    } catch (error) {
+      responseReturn(res, 500, { message: "Server error" });
+    }
+  };
 }
 
 module.exports = new authControllers();
