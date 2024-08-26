@@ -100,6 +100,20 @@ export const addProfileInfo = createAsyncThunk(
     }
   }
 );
+export const updateProfileInfo = createAsyncThunk(
+  "auth/updatingProfileInfo",
+  async (profileData, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/update-profile-info", profileData, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      // console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const changePassword = createAsyncThunk(
   "auth/changePassword",

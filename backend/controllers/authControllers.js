@@ -230,6 +230,30 @@ class authControllers {
       responseReturn(res, 500, { message: "Server error" });
     }
   };
+  updatingProfileInfo = async (req, res) => {
+    try {
+      const { name, email } = req.body;
+      const { id } = req;
+
+      if (!name || !email) {
+        return responseReturn(res, 400, "Name and email are required");
+      }
+
+      const updatedAdmin = await adminModel.findByIdAndUpdate(id, {
+        name,
+        email,
+      });
+
+      if (!updatedAdmin) {
+        return responseReturn(res, 404, "Admin not found");
+      }
+
+      responseReturn(res, 200, "Profile updated successfully", updatedAdmin);
+    } catch (error) {
+      // console.error("Error updating profile:", error);
+      responseReturn(res, 500, "Failed to update profile");
+    }
+  };
 }
 
 module.exports = new authControllers();

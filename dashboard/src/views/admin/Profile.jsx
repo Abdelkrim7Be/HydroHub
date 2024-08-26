@@ -9,7 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   profileImageUpload,
-  addProfileInfo,
+  updateProfileInfo,
   changePassword,
   messageClear,
 } from "./../../store/Reducers/authReducer"; // Adjust the path as needed
@@ -44,7 +44,7 @@ const Profile = () => {
 
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    dispatch(addProfileInfo(profileData))
+    dispatch(updateProfileInfo(profileData))
       .unwrap()
       .then(() => {
         toast.success("Profile updated successfully!");

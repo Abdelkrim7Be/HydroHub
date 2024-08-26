@@ -17,5 +17,10 @@ router.post(
   authControllers.addingProfileInfo
 );
 router.post("/change-password", authMiddleware, authControllers.changePassword);
+router.post(
+  "/update-profile-info",
+  authMiddleware,
+  authControllers.updatingProfileInfo
+);
 
 module.exports = router;
