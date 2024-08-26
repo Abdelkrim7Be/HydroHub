@@ -4,6 +4,9 @@ import { FaCartShopping } from "react-icons/fa6";
 import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
 import Chart from "react-apexcharts";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { get_latest_messages } from "../../store/Reducers/chatReducer";
 
 const AdminDashboard = () => {
   const state = {
@@ -100,6 +103,28 @@ const AdminDashboard = () => {
       ],
     },
   };
+  const dispatch = useDispatch();
+  const { latestMessages } = useSelector((state) => state.chat);
+
+  useEffect(() => {
+    dispatch(get_latest_messages());
+  }, []);
+  const getDaysAgo = (dateString) => {
+    const messageDate = new Date(dateString);
+    const today = new Date();
+    const diffTime = today - messageDate;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const formatDate = (dateString) => {
+    const daysAgo = getDaysAgo(dateString);
+    if (daysAgo === 0) {
+      return "today";
+    }
+    return `${daysAgo} day${daysAgo > 1 ? "s" : ""} ago`;
+  };
+
   return (
     <div>
       <div className="px-2 md:px-7 py-5">
@@ -157,80 +182,43 @@ const AdminDashboard = () => {
           <div className="w-full bg-[#e2e2e2] p-4 rounded-md text-[#1e1e2c]">
             <div className="flex justify-between items-center">
               <h2 className="font-semibold text-lg text-[#1e1e2c] pb-3">
-                Recent Seller Message
+                Recent Messages
               </h2>
-              <Link className="font-semibold text-sm text-[#393939]">
+              <Link
+                to={"http://localhost:3000/admin/dashboard/chat-seller"}
+                className="font-semibold text-sm text-[#393939]"
+              >
                 View all
               </Link>
             </div>
             <div className="flex flex-col gap-2 pt-6 text-[#1e1e2c]">
               <ol className="relative border-l border-[#1e1e2c] ml-4">
-                <li className="mb-3 ml-6">
-                  <div className="w-10 h-10 flex absolute -left-5 shadow-lg justify-center items-center p-[6px] bg-[#f29f6782] rounded-full z-10">
-                    <img
-                      className="w-full rounded-full h-full shadow-lg"
-                      src="http://localhost:3000/images/admin.jpg"
-                      alt="admin"
-                    />
-                  </div>
-                  <div className="p-3 bg-[#bbbbbb] rounded-lg shadow-sm">
-                    <div className="flex justify-between items-center mb-2">
-                      <a href="#" className="text-md font-normal">
-                        Admin
-                      </a>
-                      <time className="mb-1 text-sm font-normal sm:order-last sm:md-0">
-                        2 days ago
-                      </time>
+                {latestMessages.map((message, index) => (
+                  <li key={index} className="mb-3 ml-6">
+                    <div className="w-10 h-10 flex absolute -left-5 shadow-lg justify-center items-center p-[6px] bg-[#f29f6782] rounded-full z-10">
+                      <img
+                        className="w-full rounded-full h-full shadow-lg"
+                        src="http://localhost:3000/images/admin.jpg" // Update this dynamically if needed
+                        alt="admin"
+                      />
                     </div>
-                    <div className="p-2 text-xs font-normal bg-[#f4b48a61] rounded-lg border border-[#1e1e2c]">
-                      How are you?
+                    <div className="p-3 bg-[#bbbbbb] rounded-lg shadow-sm">
+                      <div className="flex justify-between items-center mb-2">
+                        <a href="#" className="text-md font-normal">
+                          {message.senderName === "Admin Support"
+                            ? "Me"
+                            : message.senderName}
+                        </a>
+                        <time className="mb-1 text-sm font-normal sm:order-last sm:md-0">
+                          {formatDate(message.createdAt)}
+                        </time>
+                      </div>
+                      <div className="p-2 text-xs font-normal bg-[#f4b48a61] rounded-lg border border-[#1e1e2c]">
+                        {message.message}
+                      </div>
                     </div>
-                  </div>
-                </li>
-                <li className="mb-3 ml-6">
-                  <div className="w-10 h-10 flex absolute -left-5 shadow-lg justify-center items-center p-[6px] bg-[#f29f6782] rounded-full z-10">
-                    <img
-                      className="w-full rounded-full h-full shadow-lg"
-                      src="http://localhost:3000/images/admin.jpg"
-                      alt="admin"
-                    />
-                  </div>
-                  <div className="p-3 bg-[#bbbbbb] rounded-lg shadow-sm">
-                    <div className="flex justify-between items-center mb-2">
-                      <a href="#" className="text-md font-normal">
-                        Admin
-                      </a>
-                      <time className="mb-1 text-sm font-normal sm:order-last sm:md-0">
-                        2 days ago
-                      </time>
-                    </div>
-                    <div className="p-2 text-xs font-normal bg-[#f4b48a61] rounded-lg border border-[#1e1e2c]">
-                      How are you?
-                    </div>
-                  </div>
-                </li>
-                <li className="mb-3 ml-6">
-                  <div className="w-10 h-10 flex absolute -left-5 shadow-lg justify-center items-center p-[6px] bg-[#f29f6782] rounded-full z-10">
-                    <img
-                      className="w-full rounded-full h-full shadow-lg"
-                      src="http://localhost:3000/images/admin.jpg"
-                      alt="admin"
-                    />
-                  </div>
-                  <div className="p-3 bg-[#bbbbbb] rounded-lg shadow-sm">
-                    <div className="flex justify-between items-center mb-2">
-                      <a href="#" className="text-md font-normal">
-                        Admin
-                      </a>
-                      <time className="mb-1 text-sm font-normal sm:order-last sm:md-0">
-                        2 days ago
-                      </time>
-                    </div>
-                    <div className="p-2 text-xs font-normal bg-[#f4b48a61] rounded-lg border border-[#1e1e2c]">
-                      How are you?
-                    </div>
-                  </div>
-                </li>
+                  </li>
+                ))}
               </ol>
             </div>
           </div>

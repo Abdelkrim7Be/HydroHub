@@ -111,6 +111,18 @@ class chatController {
       responseReturn(res, 500, { error: "Something went wrong." });
     }
   };
+  getLatestMessages = async (req, res) => {
+    try {
+      const messages = await adminSellerMessage
+        .find()
+        .sort({ createdAt: -1 })
+        .limit(3);
+
+      responseReturn(res, 200, { messages });
+    } catch (error) {
+      responseReturn(res, 500, { error: "Something went wrong." });
+    }
+  };
 }
 
 module.exports = new chatController();

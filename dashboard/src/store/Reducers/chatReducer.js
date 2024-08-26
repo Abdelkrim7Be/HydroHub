@@ -59,6 +59,21 @@ export const get_seller_message = createAsyncThunk(
     }
   }
 );
+export const get_latest_messages = createAsyncThunk(
+  "chat/get_latest_messages",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/chat/latest-messages`, {
+        withCredentials: true,
+      });
+      //   console.log("Fetched Latest Messages:", data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      //   console.log("Error fetching latest messages:", error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 // Slice
 export const chatSlice = createSlice({
@@ -71,6 +86,7 @@ export const chatSlice = createSlice({
     sellers: [],
     seller_admin_message: [],
     currentSeller: {},
+    latestMessages: [],
   },
   reducers: {
     messageClear: (state) => {
@@ -106,9 +122,11 @@ export const chatSlice = createSlice({
         state.seller_admin_message = payload.messages;
         state.currentSeller = payload.currentSeller;
       })
-
       .addCase(get_seller_message.fulfilled, (state, { payload }) => {
         state.seller_admin_message = payload.messages;
+      })
+      .addCase(get_latest_messages.fulfilled, (state, { payload }) => {
+        state.latestMessages = payload.messages;
       });
   },
 });

@@ -22,4 +22,10 @@ router.get(
   authMiddleware,
   chatController.getSellerMessage
 );
+router.get(
+  "/chat/latest-messages",
+  authMiddleware,
+  chatController.getLatestMessages
+);
+
 module.exports = router;
