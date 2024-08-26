@@ -1,10 +1,100 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { IoMdClose } from "react-icons/io";
 import { FaList } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  get_admin_message,
+  get_sellers,
+  send_message_seller_admin,
+  updateSellerMessage,
+  messageClear,
+} from "../../store/Reducers/chatReducer";
+import { Link, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { socket } from "../../utilities/utilities";
+import { FaFaceGrinBeam } from "react-icons/fa6";
+import { current } from "@reduxjs/toolkit";
 
 const ChatSeller = () => {
   const [show, setShow] = useState(false);
-  const sellerId = 65;
+  const { sellerId } = useParams();
+  const { userInfo } = useSelector((state) => state.auth);
+  const [text, setText] = useState("");
+  const scrollRef = useRef();
+  const dispatch = useDispatch();
+  const {
+    sellers,
+    activeSeller,
+    seller_admin_message,
+    currentSeller,
+    successMessage,
+  } = useSelector((state) => state.chat);
+  const [receiverMessage, setreceiverMessage] = useState("");
+
+  useEffect(() => {
+    dispatch(get_sellers());
+  }, []);
+
+  const send = (e) => {
+    e.preventDefault();
+    if (text.trim()) {
+      dispatch(
+        send_message_seller_admin({
+          senderId: "",
+          receiverId: sellerId,
+          message: text,
+          senderName: "Admin Support",
+        })
+      );
+      setText("");
+    }
+  };
+
+  useEffect(() => {
+    if (sellerId) {
+      dispatch(get_admin_message(sellerId));
+    }
+  }, [sellerId]);
+
+  useEffect(() => {
+    if (successMessage) {
+      socket.emit(
+        "send_message_admin_to_seller",
+        seller_admin_message[seller_admin_message.length - 1]
+      );
+      dispatch(messageClear());
+    }
+  }, [successMessage, seller_admin_message]);
+
+  useEffect(() => {
+    socket.on("received_seller_message", (msg) => {
+      setreceiverMessage(msg);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (receiverMessage) {
+      if (
+        receiverMessage.senderId === sellerId &&
+        receiverMessage.receiverId === ""
+      ) {
+        dispatch(updateSellerMessage(receiverMessage));
+      } else {
+        toast.success(receiverMessage.senderName + " " + "Send A message");
+        dispatch(messageClear());
+      }
+    }
+  }, [receiverMessage]);
+
+  useEffect(() => {
+    if (currentSeller) {
+      console.log("Current Seller Data:", currentSeller); // Log to see the state in the component
+    }
+  }, [currentSeller]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [seller_admin_message]);
 
   return (
     <div className="px-2 lg:px-7 py-5">
@@ -15,7 +105,7 @@ const ChatSeller = () => {
               show ? "left-[16px]" : "-left-[360px]"
             } md:left-0 md:relative transition-all rounded-md`}
           >
-            <div className="w-full h-[calc(100vh-177px)] bg-[#c28f6d]  md:bg-transparent overflow-y-auto">
+            <div className="w-full h-[calc(100vh-177px)] bg-[#c28f6d] md:bg-transparent overflow-y-auto">
               <div className="flex text-xl justify-between items-center p-4 md:p-0 md:px-3 md:pb-3 font-semibold text-[#1e1e2c]">
                 <h2>Sellers</h2>
                 <span
@@ -25,61 +115,34 @@ const ChatSeller = () => {
                   <IoMdClose />
                 </span>
               </div>
-              <div
-                className={`bg-[#f29f6731] h-[60px] flex justify-start gap-2 items-center text-[#1e1e2c] px-2 py-2 rounded-md cursor-pointer mb-2`}
-              >
-                <div className="relative">
-                  <img
-                    className="w-[38px] h-[38px] border-white border-2 max-w-[38px] rounded-full p-[2px]"
-                    src="http://localhost:3000/images/admin.jpg"
-                    alt=""
-                  />
-                  <div className="w-[9px] h-[9px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between items-center w-full">
-                    <h2 className="text-base font-semibold">
-                      Abdelkrim Bellagnech
-                    </h2>
+
+              {sellers.map((s, i) => (
+                <Link
+                  key={i}
+                  to={`/admin/dashboard/chat-seller/${s._id}`}
+                  className={`bg-[#f29f6731] h-[60px] flex justify-start gap-2 items-center text-[#1e1e2c] px-2 py-2 rounded-md cursor-pointer mb-2 ${
+                    sellerId === s._id ? "bg-[#68432b31]" : ""
+                  }  `}
+                >
+                  <div className="relative">
+                    <img
+                      className="w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full"
+                      src={s.image}
+                      alt=""
+                    />
+
+                    {activeSeller.some((a) => a.sellerId === s._id) && (
+                      <div className="w-[9px] h-[9px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
+                    )}
                   </div>
-                </div>
-              </div>
-              <div
-                className={`h-[60px] flex justify-start gap-2 items-center text-[#1e1e2c] px-2 py-2 rounded-md cursor-pointer mb-2`}
-              >
-                <div className="relative">
-                  <img
-                    className="w-[38px] h-[38px] border-white border-2 max-w-[38px] rounded-full p-[2px]"
-                    src="http://localhost:3000/images/seller.png"
-                    alt=""
-                  />
-                  <div className="w-[9px] h-[9px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between items-center w-full">
-                    <h2 className="text-base font-semibold">Soufiane omari</h2>
+
+                  <div className="flex justify-center items-start flex-col w-full">
+                    <div className="flex justify-between items-center w-full">
+                      <h2 className="text-base font-semibold">{s.name}</h2>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div
-                className={`h-[60px] flex justify-start gap-2 items-center text-[#1e1e2c] px-2 py-2 rounded-md cursor-pointer mb-2`}
-              >
-                <div className="relative">
-                  <img
-                    className="w-[38px] h-[38px] border-white border-2 max-w-[38px] rounded-full p-[2px]"
-                    src="http://localhost:3000/images/user.png"
-                    alt=""
-                  />
-                  <div className="w-[9px] h-[9px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between items-center w-full">
-                    <h2 className="text-base font-semibold">
-                      Youssef Mounakhi
-                    </h2>
-                  </div>
-                </div>
-              </div>
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -90,11 +153,15 @@ const ChatSeller = () => {
                   <div className="relative">
                     <img
                       className="w-[45px] h-[45px] border-green-500 border-2 max-w-[45px] rounded-full p-[2px]"
-                      src="http://localhost:3000/images/admin.jpg"
+                      src={
+                        currentSeller?.image ||
+                        "http://localhost:3000/images/seller.png"
+                      }
                       alt=""
                     />
                     <div className="w-[9px] h-[9px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
                   </div>
+                  <span className="text-[#1e1e2c">{currentSeller?.name}</span>
                 </div>
               )}
               <div
@@ -106,60 +173,85 @@ const ChatSeller = () => {
                 </span>
               </div>
             </div>
+
             <div className="pt-4">
-              <div className="bg-white h-[calc(100vh-290px)] rounded-md p-3 overflow-y-auto">
-                <div className="w-full flex justify-start items-center">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        className="w-[38px] h-[38px] border-2 border-[#f29f67] rounded-full max-w-[38px] p-[3px]"
-                        src="http://localhost:3000/images/admin.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start flex-col w-full bg-[#f29f6747] shadow-lg shadow-slate-300 text-[#1e1e2c] py-1 px-2 rounded-md">
-                      <span>How are you Boss?</span>
-                    </div>
+              <div className="bg-white h-[calc(100vh-290px)] rounded-md p-3 overflow-y-auto ">
+                {sellerId ? (
+                  seller_admin_message.map((m, i) => {
+                    if (m.senderId === sellerId) {
+                      return (
+                        <div
+                          ref={scrollRef}
+                          className="w-full flex justify-start items-center mb-4"
+                        >
+                          <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                            <div>
+                              <img
+                                className="w-[38px] h-[38px] border-2 border-[#f29f67] rounded-full max-w-[38px] p-[3px]"
+                                src={
+                                  currentSeller?.image ||
+                                  "http://localhost:3000/images/seller.png"
+                                }
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex justify-center items-start flex-col w-auto max-w-[75%] bg-[#f29f6747] shadow-lg shadow-slate-300 text-[#1e1e2c] py-1 px-2 rounded-md ml-2">
+                              <span>{m.message}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div
+                          ref={scrollRef}
+                          className="w-full flex justify-end items-center mb-4"
+                        >
+                          <>
+                            <div className="flex justify-center items-start flex-col w-auto max-w-[75%] bg-[#f29f6747] shadow-lg shadow-slate-300 text-[#1e1e2c] py-1 px-2 rounded-md mr-2">
+                              <span>{m.message}</span>
+                            </div>
+                            <div>
+                              <img
+                                className="w-[38px] h-[38px] border-2 border-[#f29f67] rounded-full max-w-[38px] p-[3px]"
+                                src={
+                                  userInfo?.image ||
+                                  "http://localhost:3000/images/admin.jpg"
+                                }
+                                alt=""
+                              />
+                            </div>
+                          </>
+                        </div>
+                      );
+                    }
+                  })
+                ) : (
+                  <div className="w-full h-full flex justify-center items-center flex-col gap-2 text-black">
+                    <span>
+                      <FaFaceGrinBeam />
+                    </span>
+                    <span>Select Seller </span>
                   </div>
-                </div>
-                <div className="w-full flex justify-end items-center">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div className="flex justify-center items-start flex-col w-full bg-[#f29f6747] shadow-lg shadow-slate-300 text-[#1e1e2c] py-1 px-2 rounded-md">
-                      <span>I'm fine, wbu?</span>
-                    </div>
-                    <div>
-                      <img
-                        className="w-[38px] h-[38px] border-2 border-[#f29f67] rounded-full max-w-[38px] p-[3px]"
-                        src="http://localhost:3000/images/seller.png"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full flex justify-start items-center">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        className="w-[38px] h-[38px] border-2 border-[#f29f67] rounded-full max-w-[38px] p-[3px]"
-                        src="http://localhost:3000/images/admin.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start flex-col w-full bg-[#f29f6747] shadow-lg shadow-slate-300 text-[#1e1e2c] py-1 px-2 rounded-md">
-                      <span>All good, What's the concern ?</span>
-                    </div>
-                  </div>
-                </div>
+                )}
+                <div ref={scrollRef} />
               </div>
             </div>
 
-            <form className="flex gap-3 mt-4">
+            <form className="flex gap-3 mt-4" onSubmit={send}>
               <input
+                readOnly={sellerId ? false : true}
                 className="w-full px-3 border border-[#1e1e2c] rounded-md outline-none bg-white text-[#1e1e2c] placeholder-black focus:border-[#c28f6d]"
                 type="text"
                 placeholder="Type message..."
+                value={text}
+                onChange={(e) => setText(e.target.value)}
               />
-              <button className="bg-[#c28f6d] w-[75px] h-[35px] hover:shadow-md text-white rounded-md flex items-center justify-center">
+              <button
+                disabled={sellerId ? false : true}
+                type="submit"
+                className="bg-[#c28f6d] w-[75px] h-[35px] hover:shadow-md text-white rounded-md flex items-center justify-center"
+              >
                 Send
               </button>
             </form>

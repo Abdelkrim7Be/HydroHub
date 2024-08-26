@@ -1,8 +1,11 @@
 import React from "react";
 import { FaList } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 const Header = ({ showSideBar, setShowSideBar }) => {
+  const { userInfo } = useSelector((state) => state.auth);
+
   return (
     <div className="fixed top-0 left-0 w-full py-5 px-2 lg:px-7 z-10">
       <div className="ml-0 lg:ml-[260px] rounded-md h-[64px] flex justify-between items-center bg-[#e2e2e2] px-5 transition-all">
@@ -16,7 +19,9 @@ const Header = ({ showSideBar, setShowSideBar }) => {
           <div className="hidden md:block">
             <h1 className="text-lg font-light text-[#1e1e2c]">
               Good Morning,{" "}
-              <span className="font-semibold text-[#1e1e2c]">John Doe</span>
+              <span className="font-semibold text-[#1e1e2c]">
+                {userInfo.name}
+              </span>
             </h1>
             <p className="text-sm text-[#1e1e2c]">Your control dashboard</p>
           </div>
@@ -34,15 +39,15 @@ const Header = ({ showSideBar, setShowSideBar }) => {
 
             <div className=" flex items-center gap-2 md:ml-auto">
               <img
-                src="http://localhost:3000/images/admin.jpg"
+                src={userInfo.image || "http://localhost:3000/images/admin.jpg"}
                 alt="Profile"
                 className="w-[45px] h-[45px] rounded-full overflow-hidden"
               />
               <span className="text-[#1e1e2c] font-medium hidden md:inline">
-                Admin
+                {userInfo.role}
               </span>
               <span className="text-[#1e1e2c] font-medium md:hidden">
-                John Doe
+                {userInfo.name}
               </span>
             </div>
           </div>
