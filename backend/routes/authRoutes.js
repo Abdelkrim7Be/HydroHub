@@ -22,5 +22,6 @@ router.post(
   authMiddleware,
   authControllers.updatingProfileInfo
 );
+router.get("/logout", authMiddleware, authControllers.logout);
 
 module.exports = router;

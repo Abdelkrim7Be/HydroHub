@@ -53,5 +53,53 @@ class sellerController {
       responseReturn(res, 500, { error: error.message });
     }
   };
+  getActiveSellers = async (req, res) => {
+    let { page, perPage, searchValue } = req.query;
+
+    page = parseInt(page);
+    perPage = parseInt(perPage);
+
+    const skipPage = perPage * (page - 1);
+
+    try {
+      if (searchValue) {
+        const sellers = await sellerModel
+          .find({
+            $text: { $search: searchValue },
+            status: "active",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSellers = await sellerModel
+          .find({
+            $text: { $search: searchValue },
+            status: "active",
+          })
+          .countDocuments();
+
+        responseReturn(res, 200, { totalSellers, sellers });
+      } else {
+        const sellers = await sellerModel
+          .find({
+            status: "active",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSellers = await sellerModel
+          .find({
+            status: "active",
+          })
+          .countDocuments();
+
+        responseReturn(res, 200, { totalSellers, sellers });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 module.exports = new sellerController();

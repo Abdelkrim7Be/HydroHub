@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { FaArrowDownWideShort } from "react-icons/fa6";
@@ -7,35 +7,37 @@ import Pagination from "../Pagination";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { FaImage } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { get_active_sellers } from "../../store/Reducers/sellerReducer";
+import Search from "./../components/Search";
 
 const Sellers = () => {
+  const dispatch = useDispatch();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [perPage, setPerPage] = useState(5);
   const [show, setShow] = useState(false);
+
+  const { sellers, totalSellers } = useSelector((state) => state.seller);
+
+  useEffect(() => {
+    const obj = {
+      perPage: parseInt(perPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(get_active_sellers(obj));
+  }, [searchValue, currentPage, perPage]);
   return (
     <div className="px-2 lg:px-7 pt-5">
       <h1 className="text-[20px] font-bold mb-3">Sellers</h1>
       <div className="w-full p-4 bg-[#e2e2e2] rounded-md">
-        <div className="flex justify-between items-center">
-          <select
-            onChange={(e) => setPerPage(parseInt(e.target.value))}
-            className="px-4 py-2  outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden"
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-          </select>
-          <div className="hidden md:block relative">
-            <input
-              type="text"
-              className="px-3 py-2 outline-none border bg-[#f29f6731] text-[#1e1e2c] font-medium text-sm focus:bg-[#e2e2e2] hover:text-[#1e1e2c] rounded-full shadow-lg focus:border-stone-300 overflow-hidden pl-10 placeholder-black"
-              name="search"
-              placeholder="Search"
-            />
-            <IoSearchSharp className="absolute top-1/2 left-3 transform -translate-y-1/2 text-[#1e1e2c]" />
-          </div>
-        </div>
+        <Search
+          setPerPage={setPerPage}
+          setSearchValue={setSearchValue}
+          searchValue={searchValue}
+        />
         <div className="mt-5 relative overflow-x-auto">
           <table className="w-full text-left text-[#1e1e2c] font-medium text-sm bg-[#e2e2e2] rounded-lg">
             <thead className="text-sm uppercase border-b border-[#7f7f7f] ">
@@ -62,7 +64,10 @@ const Sellers = () => {
                   Devision
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Locality
+                  District
+                </th>
+                <th scope="col" className="py-3 px-4">
+                  Region
                 </th>
                 <th scope="col" className="py-3 px-4">
                   Action
@@ -70,13 +75,13 @@ const Sellers = () => {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((elt, i) => (
-                <tr>
+              {sellers.map((elt, i) => (
+                <tr key={i}>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    {elt}
+                    {i + 1}
                   </td>
                   <td
                     scope="row"
@@ -84,7 +89,9 @@ const Sellers = () => {
                   >
                     <img
                       className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/category/${elt}.jpg`}
+                      src={
+                        elt?.image || `http://localhost:3000/images/seller.png`
+                      }
                       alt=""
                     />
                   </td>
@@ -92,44 +99,53 @@ const Sellers = () => {
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    Soufiane Omari
+                    {elt.name}
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    HMM
+                    {elt?.shopInfo?.shopName || "HMM"}
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Pending</span>
+                    <span>{elt.payment}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    soufianeomari@gmail.com
+                    {elt.email}
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    Meknes
+                    {elt?.shopInfo?.divisionName || "NP"}
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    Hamria
+                    {elt?.shopInfo?.districtName || "NP"}
+                  </td>
+                  <td
+                    scope="row"
+                    className="py-1 px-4 font-medium whitespace-nowrap"
+                  >
+                    {elt?.shopInfo?.region || "NP"}
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
                     <div className="flex justify-start items-start gap-4">
-                      <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
+                      <Link
+                        to={`/admin/dashboard/seller/details/${elt._id}`}
+                        className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300"
+                      >
                         <FaEye />
                       </Link>
                     </div>
@@ -139,13 +155,14 @@ const Sellers = () => {
             </tbody>
           </table>
         </div>
+
         <div className="w-full flex justify-end mt-4 bottom-4 right-4">
           <Pagination
             pageNumber={currentPage}
             setPageNumber={setCurrentPage}
-            totalItems={50}
+            totalItems={totalSellers}
             perPage={perPage}
-            showItem={3}
+            showItem={4}
           />
         </div>
       </div>

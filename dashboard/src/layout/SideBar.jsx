@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getNav } from "../navigation/index";
 import { BiLogOutCircle } from "react-icons/bi";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { logout } from "../store/Reducers/authReducer";
+import { useSelector, useDispatch } from "react-redux";
 
 const SideBar = ({ showSideBar, setShowSideBar }) => {
   const dispatch = useDispatch();
   const { role } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const { pathname } = useLocation();
   const [allNav, setAllNav] = useState([]);
@@ -28,7 +29,7 @@ const SideBar = ({ showSideBar, setShowSideBar }) => {
       <div
         className={`w-[260px] fixed bg-[#e2e2e2] z-50 top-0 h-screen  transition-all ${
           showSideBar ? "left-0" : "-left-[260px] lg:left-0"
-        } `}
+        } flex flex-col justify-between`}
       >
         <div>
           <div className="h-[100px] flex justify-center items-center">
@@ -56,8 +57,11 @@ const SideBar = ({ showSideBar, setShowSideBar }) => {
             </ul>
           </div>
         </div>
-        <div className="mb-7 px-[16px] pl-0">
-          <button className="flex items-center gap-[12px] px-[12px] py-[9px] rounded-r-full w-full text-[#1e1e2c] font-medium text-sm hover:bg-[#f29f6747] hover:text-white transition-all duration-200">
+        <div className="mb-4 px-[16px] pl-0">
+          <button
+            className="flex items-center gap-[12px] px-[12px] py-[9px] rounded-r-full w-full text-[#1e1e2c] font-medium text-sm hover:bg-[#f29f6747] hover:text-white transition-all duration-200"
+            onClick={() => dispatch(logout({ navigate, role }))}
+          >
             <BiLogOutCircle />
             <span>Sign out</span>
           </button>

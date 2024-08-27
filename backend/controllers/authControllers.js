@@ -254,6 +254,18 @@ class authControllers {
       responseReturn(res, 500, "Failed to update profile");
     }
   };
+
+  logout = async (req, res) => {
+    try {
+      res.cookie("accessToken", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+      responseReturn(res, 200, { message: "GoodBye!!" });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
 }
 
 module.exports = new authControllers();
