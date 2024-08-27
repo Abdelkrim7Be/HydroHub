@@ -18,5 +18,10 @@ router.post(
   sellerController.updateSellerStatus
 );
 router.get("/get-sellers", authMiddleware, sellerController.getActiveSellers);
+router.get(
+  "/get-inactive-sellers",
+  authMiddleware,
+  sellerController.getInactiveSellers
+);
 
 module.exports = router;

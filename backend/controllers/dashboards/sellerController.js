@@ -101,5 +101,53 @@ class sellerController {
       console.log(error.message);
     }
   };
+  getInactiveSellers = async (req, res) => {
+    let { page, perPage, searchValue } = req.query;
+
+    page = parseInt(page);
+    perPage = parseInt(perPage);
+
+    const skipPage = perPage * (page - 1);
+
+    try {
+      if (searchValue) {
+        const sellers = await sellerModel
+          .find({
+            $text: { $search: searchValue },
+            status: "inactive",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSellers = await sellerModel
+          .find({
+            $text: { $search: searchValue },
+            status: "inactive",
+          })
+          .countDocuments();
+
+        responseReturn(res, 200, { totalSellers, sellers });
+      } else {
+        const sellers = await sellerModel
+          .find({
+            status: "inactive",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSellers = await sellerModel
+          .find({
+            status: "inactive",
+          })
+          .countDocuments();
+
+        responseReturn(res, 200, { totalSellers, sellers });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 module.exports = new sellerController();
