@@ -17,5 +17,10 @@ router.get(
   "/payment/withdrawed/:sellerId",
   paymentController.getWithdrawedAmounts
 );
+router.get("/payment/request", paymentController.gettingPaymentRequest);
+router.post(
+  "/payment/requestConfirm",
+  paymentController.confirmingPaymentRequest
+);
 
 module.exports = router;

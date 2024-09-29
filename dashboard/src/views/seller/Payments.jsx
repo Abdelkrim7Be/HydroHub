@@ -34,6 +34,12 @@ const Payments = () => {
     pendingAmount,
     availableAmount,
   } = useSelector((state) => state.payment);
+  const sortedPendingWithdraws = [...pendingWithdraws].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  const sortedSuccessfulWithdraws = [...successfulWithdraws].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
   const [amount, setAmount] = useState(0);
 
@@ -199,7 +205,12 @@ const Payments = () => {
                 outerElementType={outerElementType}
               >
                 {({ index, style }) => (
-                  <Row index={index} style={style} listType="pending" />
+                  <Row
+                    index={index}
+                    style={style}
+                    listType="pending"
+                    withdraw={sortedPendingWithdraws[index]}
+                  />
                 )}
               </List>
             }
@@ -224,7 +235,12 @@ const Payments = () => {
                 outerElementType={outerElementType}
               >
                 {({ index, style }) => (
-                  <Row index={index} style={style} listType="success" />
+                  <Row
+                    index={index}
+                    style={style}
+                    listType="success"
+                    withdraw={sortedSuccessfulWithdraws[index]}
+                  />
                 )}
               </List>
             }

@@ -51,7 +51,7 @@ export const confirmPaymentRequest = createAsyncThunk(
   async (paymentId, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.post(
-        `/payment/request-confirm`,
+        `/payment/requestConfirm`,
         { paymentId },
         { withCredentials: true }
       );
@@ -141,7 +141,7 @@ const paymentReducer = createSlice({
       })
 
       .addCase(getPaymentRequest.fulfilled, (state, { payload }) => {
-        state.pendingWithdraws = payload.withdrawalRequest;
+        state.pendingWithdraws = payload.pending;
       })
 
       .addCase(confirmPaymentRequest.pending, (state, { payload }) => {

@@ -1,5 +1,13 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FixedSizeList as List } from "react-window";
+import {
+  confirmPaymentRequest as confirmPaymentAction, // Renamed import
+  getPaymentRequest,
+  messageClear,
+} from "../../store/Reducers/paymentReducer";
+import moment from "moment";
+import toast from "react-hot-toast";
 
 function handleOnWheel({ deltaY }) {
   console.log("handleOnWheel", deltaY);
@@ -10,26 +18,68 @@ const outerElementType = forwardRef((props, ref) => (
 ));
 
 const PaymentRequest = () => {
-  const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const Row = ({ index, style }) => {
+  const dispatch = useDispatch();
+  const { successMessage, errorMessage, pendingWithdraws, loader } =
+    useSelector((state) => state.payment);
+  const [paymentId, setPaymentId] = useState("");
+
+  const sortedPendingWithdraws = [...pendingWithdraws].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
+  useEffect(() => {
+    dispatch(getPaymentRequest());
+  }, [dispatch]);
+
+  const handleConfirmPayment = (id) => {
+    setPaymentId(id);
+    dispatch(confirmPaymentAction(id))
+      .unwrap()
+      .catch((err) => console.error("Payment confirmation error:", err));
+  };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage, dispatch]);
+
+  const Row = ({ index, style, withdraw }) => {
     return (
       <div style={style} className="flex text-sm font-medium">
-        <div className="w-[20%] p-2 whitespace-nowrap">{++index}</div>
-        <div className="w-[20%] p-2 whitespace-nowrap">$7548</div>
+        <div className="w-[20%] p-2 whitespace-nowrap">{index + 1}</div>
+        <div className="w-[20%] p-2 whitespace-nowrap">
+          ${withdraw?.amount || "N/A"}
+        </div>
         <div className="w-[20%] p-2 whitespace-nowrap">
           <span className="py-[1px] px-[5px] bg-[#f29f6731] text-[#1e1e2c] rounded-md text-sm">
-            Pending
+            {withdraw?.status || "N/A"}
           </span>
         </div>
-        <div className="w-[20%] p-2 whitespace-nowrap">27 July 2024</div>
         <div className="w-[20%] p-2 whitespace-nowrap">
-          <button className="bg-[#c28f6d] shadow-lg hover:shadow-slate-300 px-3 py-[2px] cursor-pointer text-white rounded-sm text-sm">
-            Confirm
+          {moment(withdraw?.createdAt).format("LL") || "N/A"}
+        </div>
+        <div className="w-[20%] p-2 whitespace-nowrap">
+          <button
+            disabled={loader}
+            onClick={() => handleConfirmPayment(withdraw?.id)} // Use renamed local function
+            className="bg-[#c28f6d] hover:bg-[#b57858] text-white rounded px-3 py-0"
+          >
+            {loader && paymentId === withdraw?.id ? "loading..." : "Confirm"}
           </button>
         </div>
       </div>
     );
   };
+
+  useEffect(() => {
+    console.log("Pending Withdraws:", pendingWithdraws);
+  }, [pendingWithdraws]);
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -51,11 +101,18 @@ const PaymentRequest = () => {
                 style={{ minWidth: "340px" }}
                 className="List"
                 height={350}
-                itemCount={10}
+                itemCount={pendingWithdraws.length}
                 itemSize={35}
                 outerElementType={outerElementType}
               >
-                {Row}
+                {({ index, style }) => (
+                  <Row
+                    index={index}
+                    style={style}
+                    listType="pending"
+                    withdraw={sortedPendingWithdraws[index]}
+                  />
+                )}
               </List>
             }
           </div>

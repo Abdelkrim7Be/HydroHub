@@ -121,6 +121,40 @@ class paymentController {
       });
     }
   };
+  gettingPaymentRequest = async (req, res) => {
+    try {
+      const withdrawalRequest = await withdrawRequest.find({
+        status: "pending",
+      });
+      responseReturn(res, 200, { pending: withdrawalRequest });
+    } catch (error) {
+      responseReturn(res, 500, {
+        message: "Internal Server Error",
+      });
+    }
+  };
+  confirmingPaymentRequest = async (req, res) => {
+    const { paymentId } = req.body;
+    try {
+      const updatedPayment = await WithdrawModel.findByIdAndUpdate(
+        paymentId,
+        { status: "success" },
+        { new: true }
+      );
+
+      if (!updatedPayment) {
+        responseReturn(res, 404, { message: "Payment request not found" });
+      }
+      responseReturn(res, 200, {
+        message: "Payment request confirmed successfully",
+        payment: updatedPayment,
+      });
+    } catch (error) {
+      responseReturn(res, 500, {
+        message: "Internal Server Error",
+      });
+    }
+  };
 }
 
 module.exports = new paymentController();
