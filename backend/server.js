@@ -94,6 +94,7 @@ app.use("/api", require("./routes/dashboards/categoryRoutes"));
 app.use("/api", require("./routes/dashboards/productRoutes"));
 app.use("/api", require("./routes/dashboards/sellerRoutes"));
 app.use("/api", require("./routes/dashboards/chatRoutes"));
+app.use("/api", require("./routes/paymentRoutes"));
 
 app.get("/", (req, res) => {
   res.send("My backend is fine");

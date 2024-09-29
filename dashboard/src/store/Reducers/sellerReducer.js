@@ -133,6 +133,6 @@ const sellerReducer = createSlice({
       });
   },
 });
-export const { messageClear, successMessage, errorrMessage } =
+export const { messageClear, successMessage, errorMessage } =
   sellerReducer.actions;
 export default sellerReducer.reducer;

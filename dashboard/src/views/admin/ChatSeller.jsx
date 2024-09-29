@@ -127,7 +127,7 @@ const ChatSeller = () => {
                   <div className="relative">
                     <img
                       className="w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full"
-                      src={s.image}
+                      src={s.image || "http://localhost:3000/images/seller.png"}
                       alt=""
                     />
 
@@ -159,7 +159,7 @@ const ChatSeller = () => {
                       }
                       alt=""
                     />
-                    <div className="w-[9px] h-[9px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
+                    {/* <div className="w-[9px] h-[9px] bg-green-500 rounded-full absolute right-0 bottom-0"></div> */}
                   </div>
                   <span className="text-[#1e1e2c">{currentSeller?.name}</span>
                 </div>
