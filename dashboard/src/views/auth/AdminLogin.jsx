@@ -55,6 +55,7 @@ const AdminLogin = () => {
                 className="w-41 mb-0 mx-auto block"
               />
             </div>
+
             <form className="mt-0 space-y-4" onSubmit={submit}>
               <div>
                 <label className="text-gray-800 text-sm mb-2 block">
@@ -90,7 +91,7 @@ const AdminLogin = () => {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-4">
+              {/* <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center">
                   <input
                     id="remember-me"
@@ -110,7 +111,7 @@ const AdminLogin = () => {
                     Forgot your password?
                   </a>
                 </div>
-              </div>
+              </div> */}
 
               <div className="!mt-8">
                 <button
@@ -121,13 +122,22 @@ const AdminLogin = () => {
                   {loader ? <LoadingSpinner /> : "Sign in"}
                 </button>
               </div>
-              <p className="text-gray-800 text-sm !mt-8 text-center">
+              {/* <p className="text-gray-800 text-sm !mt-8 text-center">
                 Don't have an account?{" "}
                 <Link
                   to="/register"
                   className="text-[#c28f6d] hover:underline ml-1 whitespace-nowrap"
                 >
                   Register here
+                </Link>
+              </p> */}
+              <p className="text-gray-800 text-sm !mt-8 text-center">
+                Are you a seller?
+                <Link
+                  to="/login"
+                  className="text-[#c28f6d] hover:underline  ml-1 whitespace-nowrap"
+                >
+                  Go to Seller Login
                 </Link>
               </p>
             </form>

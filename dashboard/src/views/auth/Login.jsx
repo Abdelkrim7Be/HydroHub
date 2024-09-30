@@ -52,9 +52,9 @@ const Login = () => {
           alt="Logo"
         />
       </div>
-      <div className="w-full max-w-4xl max-md:max-w-xl mx-auto">
-        <div className="bg-[#e2e2e2] grid md:grid-cols-2 gap-16 w-full sm:p-8 p-6 shadow-md rounded-md overflow-hidden">
-          <div className="max-md:order-1 space-y-6">
+      <div className="w-full flex justify-center items-center max-w-4xl max-md:max-w-xl mx-auto">
+        <div className="bg-[#e2e2e2] grid md:grid-cols-1 gap-16 w-[50%] sm:p-8 p-6 shadow-md rounded-md overflow-hidden">
+          {/* <div className="max-md:order-1 space-y-6">
             <div className="md:mb-16 mb-8">
               <h3 className="text-[#1e1e2c] text-2xl font-bold">
                 Welcome Back
@@ -124,7 +124,7 @@ const Login = () => {
                 Continue with Google
               </button>
             </div>
-          </div>
+          </div> */}
 
           <form className="w-full" onSubmit={submit}>
             <div className="mb-8">
@@ -182,6 +182,15 @@ const Login = () => {
                     className="text-[#c28f6d] hover:underline"
                   >
                     Register
+                  </Link>
+                </p>
+                <p className="text-gray-800 text-sm !mt-8 text-center">
+                  Are you the administrator?
+                  <Link
+                    to="/admin/login"
+                    className="text-[#c28f6d] hover:underline  ml-1 whitespace-nowrap"
+                  >
+                    Go to Admin Login
                   </Link>
                 </p>
               </div>
