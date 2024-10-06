@@ -125,7 +125,7 @@ const SellerDashboard = () => {
           </div>
           <div className="flex justify-between items-center p-5 bg-[#e2e2e2] rounded-md gap-3">
             <div className="flex flex-col justify-start items-start text-[#1e1e2c]">
-              <h2 className="text-3xl font-semibold">{productCount}</h2>
+              <h2 className="text-3xl font-semibold">120</h2>
               <span className="text-md font-light">Products</span>
             </div>
             <div className="w-[40px] h-[40px] rounded-full bg-[#f29f6782] flex justify-center items-center text-xl">

@@ -67,10 +67,10 @@ const PaymentRequest = () => {
         <div className="w-[20%] p-2 whitespace-nowrap">
           <button
             disabled={loader}
-            onClick={() => handleConfirmPayment(withdraw?.id)} // Use renamed local function
+            onClick={() => handleConfirmPayment(withdraw?._id)} // Use renamed local function
             className="bg-[#c28f6d] hover:bg-[#b57858] text-white rounded px-3 py-0"
           >
-            {loader && paymentId === withdraw?.id ? "loading..." : "Confirm"}
+            {loader && paymentId === withdraw?._id ? "loading..." : "Confirm"}
           </button>
         </div>
       </div>
