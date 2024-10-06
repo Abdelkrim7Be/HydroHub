@@ -186,6 +186,50 @@ class productController {
       }
     });
   };
+
+  getDiscountProducts = async (req, res) => {
+    const { page, searchValue, perPage } = req.query;
+    const { id } = req;
+    let skipPage = parseInt(perPage) * (parseInt(page) - 1);
+
+    try {
+      const query = { sellerId: id, discount: { $gt: 0 } }; // Filter for products with discount > 0
+
+      if (searchValue) {
+        query.$text = { $search: searchValue };
+      }
+
+      const products = await productModel
+        .find(query)
+        .skip(skipPage)
+        .limit(perPage)
+        .sort({ createdAt: -1 });
+
+      const totalProducts = await productModel.countDocuments(query); // Count filtered products
+
+      responseReturn(res, 200, { products, totalProducts });
+    } catch (error) {
+      console.log(error.message);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+  deletingProduct = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deletedProduct = await productModel.findByIdAndDelete(id);
+
+      if (!deletedProduct) {
+        responseReturn(res, 404, { message: "Product not found" });
+      }
+
+      responseReturn(res, 200, {
+        message: "Product deleted successfully",
+        productId: id,
+      });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
 }
 
 module.exports = new productController();

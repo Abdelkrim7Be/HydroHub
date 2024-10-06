@@ -4,7 +4,10 @@ import Pagination from "../Pagination";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import Search from "./../components/Search";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../../store/Reducers/productReducer";
+import {
+  getProducts,
+  deleteProduct,
+} from "../../store/Reducers/productReducer";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -28,6 +31,12 @@ const Products = () => {
     };
     dispatch(getProducts(obj));
   }, [searchValue, currentPage, perPage]);
+
+  const handleDelete = (productId) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      dispatch(deleteProduct(productId));
+    }
+  };
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -144,10 +153,13 @@ const Products = () => {
                       >
                         <FaEdit />
                       </Link>
-                      <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
+                      {/* <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
                         <FaEye />
-                      </Link>
-                      <Link className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300">
+                      </Link> */}
+                      <Link
+                        onClick={() => handleDelete(elt._id)}
+                        className="p-[10px] bg-[#f29f6731] rounded hover:shadow-lg hover:shadow-slate-300 cursor-pointer"
+                      >
                         <FaTrash />
                       </Link>
                     </div>

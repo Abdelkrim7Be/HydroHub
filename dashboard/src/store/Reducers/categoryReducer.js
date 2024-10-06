@@ -63,11 +63,13 @@ export const updateCategory = createAsyncThunk(
 );
 
 export const deleteCategory = createAsyncThunk(
-  "category/deleteCategory",
-  async (id, { rejectWithValue }) => {
+  "category/deletingCategory",
+  async (id, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response = await api.delete(`category-delete/${id}`);
-      return response.data;
+      const { data } = await api.delete(`/category-delete/${id}`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
@@ -123,14 +125,19 @@ const categoryReducer = createSlice({
         state.errorMessage = payload.error;
       })
 
-      .addCase(deleteCategory.fulfilled, (state, action) => {
-        state.categories = state.categories.filter(
-          (cat) => cat._id !== action.meta.arg
-        );
-        state.successMessage = action.payload.message;
+      .addCase(deleteCategory.pending, (state) => {
+        state.loader = true;
       })
-      .addCase(deleteCategory.rejected, (state, action) => {
-        state.errorMessage = action.payload;
+      .addCase(deleteCategory.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+      .addCase(deleteCategory.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        state.categories = state.categories.filter(
+          (cat) => cat._id !== payload.id
+        );
       });
   },
 });

@@ -88,7 +88,7 @@ const Category = () => {
       searchValue,
     };
     dispatch(getCategory(obj));
-  }, [searchValue, currentPage, perPage]);
+  }, [searchValue, currentPage, perPage, successMessage]);
 
   const handleEdit = (category) => {
     setState({

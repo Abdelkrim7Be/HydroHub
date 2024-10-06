@@ -2,6 +2,7 @@ const formidable = require("formidable");
 const { responseReturn } = require("../../utilities/response");
 const cloudinary = require("cloudinary").v2;
 const categoryModel = require("../../models/categoryModel");
+const productModel = require("../../models/productModel");
 class categoryController {
   addCategory = async (req, res) => {
     const form = formidable({ multiples: true });
@@ -164,16 +165,15 @@ class categoryController {
   };
 
   deleteCategories = async (req, res) => {
-    const { id } = req.params;
-
-    if (!id) {
-      console.error("Category ID is undefined");
-      return responseReturn(res, 400, { error: "Category ID is required" });
-    }
-
-    console.log(`Deleting category with ID: ${id}`);
-
     try {
+      const { id } = req.params;
+
+      if (!id) {
+        console.error("Category ID is undefined");
+        return responseReturn(res, 400, { error: "Category ID is required" });
+      }
+
+      console.log(`Deleting category with ID: ${id}`);
       const category = await categoryModel.findById(id);
       if (!category) {
         return responseReturn(res, 404, { error: "Category not found" });

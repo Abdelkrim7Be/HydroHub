@@ -37,6 +37,7 @@ export const getProducts = createAsyncThunk(
     }
   }
 );
+
 export const getProduct = createAsyncThunk(
   "product/gettingProduct",
   async (productId, { rejectWithValue, fulfillWithValue }) => {
@@ -48,6 +49,25 @@ export const getProduct = createAsyncThunk(
       return fulfillWithValue(data);
     } catch (error) {
       // console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const getDiscountedProducts = createAsyncThunk(
+  "product/gettingProducts",
+  async (
+    { perPage, page, searchValue },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const { data } = await api.get(
+        `/get-discount-products?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -88,6 +108,19 @@ export const updateProductImage = createAsyncThunk(
       return fulfillWithValue(data);
     } catch (error) {
       console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const deleteProduct = createAsyncThunk(
+  "product/deletingProduct",
+  async (productId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.delete(`/delete-product/${productId}`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -143,6 +176,21 @@ const productReducer = createSlice({
       .addCase(updateProductImage.fulfilled, (state, { payload }) => {
         state.product = payload.product;
         state.successMessage = payload.message;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(deleteProduct.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+      .addCase(deleteProduct.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        state.products = state.products.filter(
+          (product) => product._id !== payload.productId
+        );
+        state.totalProducts -= 1;
       });
   },
 });

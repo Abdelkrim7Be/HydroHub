@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoCartOutline } from "react-icons/io5";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
 import Chart from "react-apexcharts";
 import { Link } from "react-router-dom";
+import { getProducts } from "../../store/Reducers/productReducer"; // Update the path if necessary
+import { useDispatch, useSelector } from "react-redux";
 
 const SellerDashboard = () => {
+  const dispatch = useDispatch();
+
   const state = {
     series: [
       {
@@ -100,6 +104,12 @@ const SellerDashboard = () => {
       ],
     },
   };
+  const [productCount, setProductCount] = useState(0);
+  useEffect(() => {
+    dispatch(getProducts()).then((products) => {
+      setProductCount(products.length);
+    });
+  }, [dispatch]);
   return (
     <div>
       <div className="px-2 md:px-7 py-5">
@@ -115,7 +125,7 @@ const SellerDashboard = () => {
           </div>
           <div className="flex justify-between items-center p-5 bg-[#e2e2e2] rounded-md gap-3">
             <div className="flex flex-col justify-start items-start text-[#1e1e2c]">
-              <h2 className="text-3xl font-semibold">50</h2>
+              <h2 className="text-3xl font-semibold">{productCount}</h2>
               <span className="text-md font-light">Products</span>
             </div>
             <div className="w-[40px] h-[40px] rounded-full bg-[#f29f6782] flex justify-center items-center text-xl">
