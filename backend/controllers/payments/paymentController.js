@@ -135,8 +135,9 @@ class paymentController {
   };
   confirmingPaymentRequest = async (req, res) => {
     const { paymentId } = req.body;
+    console.log(paymentId);
     try {
-      const updatedPayment = await WithdrawModel.findByIdAndUpdate(
+      const updatedPayment = await withdrawRequest.findByIdAndUpdate(
         paymentId,
         { status: "success" },
         { new: true }

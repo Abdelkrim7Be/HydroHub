@@ -12,14 +12,24 @@ router.post(
   authMiddleware,
   paymentController.withdrawalRequest
 );
-router.get("/payment/pending/:sellerId", paymentController.getPendingAmounts);
+router.get(
+  "/payment/pending/:sellerId",
+  authMiddleware,
+  paymentController.getPendingAmounts
+);
 router.get(
   "/payment/withdrawed/:sellerId",
+  authMiddleware,
   paymentController.getWithdrawedAmounts
 );
-router.get("/payment/request", paymentController.gettingPaymentRequest);
+router.get(
+  "/payment/request",
+  authMiddleware,
+  paymentController.gettingPaymentRequest
+);
 router.post(
   "/payment/requestConfirm",
+  authMiddleware,
   paymentController.confirmingPaymentRequest
 );
 
